@@ -189,27 +189,6 @@ p{margin:0 0 1.1em}
 .figcap{position:absolute; left:18px; bottom:15px; z-index:2; font-family:var(--sans);
   font-size:.64rem; letter-spacing:.24em; text-transform:uppercase; color:rgba(239,236,230,.82)}
 
-/* ---------- Foto-Platzhalter ----------
-   Steht im selben Slot wie das spätere Bild. Ersetzen: siehe index.html.   */
-.ph{position:absolute; inset:0; display:flex; flex-direction:column;
-  align-items:center; justify-content:center; gap:.9em; text-align:center; padding:24px;
-  background:
-    radial-gradient(80% 60% at 50% 30%, hsl(var(--eh) var(--es) 50% / .10), transparent 70%),
-    linear-gradient(160deg, #131318 0%, #0b0b0f 55%, #08080a 100%);
-}
-.ph::before{content:""; position:absolute; inset:0; opacity:.5;
-  background-image:linear-gradient(rgba(239,236,230,.045) 1px, transparent 1px),
-                   linear-gradient(90deg, rgba(239,236,230,.045) 1px, transparent 1px);
-  background-size:44px 44px}
-.ph .ph-ic{position:relative; width:42px; height:42px; border-radius:50%;
-  border:1px solid hsl(var(--eh) var(--es) var(--el) / .45); display:grid; place-items:center;
-  color:hsl(var(--eh) var(--es) var(--el) / .9); font-size:1rem; transition:border-color .6s linear}
-.ph .ph-t{position:relative; font-family:var(--sans); font-size:.68rem; letter-spacing:.22em;
-  text-transform:uppercase; color:var(--ink-faint); line-height:1.9; max-width:26ch}
-.hero-media .ph{background:
-    radial-gradient(70% 55% at 62% 34%, hsl(var(--eh) var(--es) 50% / .12), transparent 72%),
-    linear-gradient(165deg, #14141a 0%, #0a0a0e 60%, #08080a 100%)}
-
 /* ---------- Pull-Quote ---------- */
 .pull{padding-block:clamp(96px,17vh,190px); text-align:center}
 .pull blockquote{margin:0 auto; max-width:22ch; font-family:var(--serif); font-weight:500;
@@ -327,9 +306,10 @@ p{margin:0 0 1.1em}
   border:1px solid var(--line-2); background:var(--bg-2)}
 #cal-widget{border-radius:14px; min-height:630px}
 .cal-empty{display:flex; flex-direction:column; align-items:center; justify-content:center;
-  gap:1.1em; height:630px; padding:32px; text-align:center;
+  gap:1.4em; height:630px; padding:32px; text-align:center;
   color:var(--ink-faint); font-family:var(--sans); font-size:.85rem;
   letter-spacing:.02em; line-height:1.8}
+.cal-mark{width:64px; height:auto; display:block; opacity:.55}
 @media (max-width:560px){ .cal-empty{height:600px} }
 
 /* ---------- Essays ---------- */
@@ -355,7 +335,9 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
   background:linear-gradient(180deg, rgba(8,8,11,0), rgba(8,8,11,.94) 20%, #07070a 46%)}
 .foot-close{text-align:center; max-width:600px; margin:0 auto;
   padding-bottom:clamp(44px,6vw,68px); display:flex; flex-direction:column; align-items:center}
-.foot-logo{height:clamp(58px,7vw,88px); width:auto; display:block; margin-bottom:1.7rem}
+.foot-logo{height:clamp(58px,7vw,88px); width:auto; display:block; margin-bottom:1.15rem}
+.foot-name{font-family:var(--sans); font-weight:500; font-size:.78rem;
+  letter-spacing:.32em; text-transform:uppercase; color:var(--ink); margin:0 0 1.9rem}
 .foot-line{font-family:var(--serif); font-weight:500;
   font-size:clamp(1.35rem,1rem+1.5vw,2rem); line-height:1.32; letter-spacing:-.01em;
   color:var(--ink); max-width:22ch; margin-bottom:2.1rem}
