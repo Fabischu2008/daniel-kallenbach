@@ -13,7 +13,11 @@
 <link rel="canonical" href="https://daniel-kallenbach.de/">
 <link rel="icon" href="assets/mark.svg" type="image/svg+xml">
 
-<!-- Open Graph / Social — Bild ergänzen, sobald vorhanden -->
+<!-- Open Graph / Social -->
+<meta property="og:image" content="https://daniel-kallenbach.de/assets/hero.jpg">
+<meta property="og:image:width" content="1024">
+<meta property="og:image:height" content="682">
+<meta name="twitter:image" content="https://daniel-kallenbach.de/assets/hero.jpg">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://daniel-kallenbach.de/">
 <meta property="og:site_name" content="Daniel Kallenbach">
@@ -77,10 +81,8 @@
        einsetzen. Empfohlen: Querformat, mind. 2000px breit, Motiv rechts.  -->
   <header class="hero" id="hero">
     <div class="hero-media">
-      <div class="ph" aria-hidden="true">
-        <span class="ph-ic">◎</span>
-        <span class="ph-t">Hero-Foto<br>Querformat · ab 2000&nbsp;px</span>
-      </div>
+      <img src="assets/hero.jpg" alt="Bergsee in den Dolomiten, der Gipfel spiegelt sich im stillen Wasser"
+           fetchpriority="high" decoding="async" style="object-position:center 38%">
     </div>
     <div class="hero-inner wrap">
       <p class="eyebrow reveal">Bewusstsein · Präsenz · Wirkung</p>
@@ -126,11 +128,8 @@
       </div>
       <div class="m reveal" style="--d:120ms">
         <figure class="figure tall">
-          <!-- Foto ersetzen: <img src="assets/portrait-1.jpg" alt="…" loading="eager" decoding="async"> -->
-          <div class="ph" aria-hidden="true">
-            <span class="ph-ic">◎</span>
-            <span class="ph-t">Porträt<br>Hochformat 3:4</span>
-          </div>
+          <img src="assets/daniel-portraet.jpg" alt="Daniel Kallenbach im Porträt, im Hintergrund Bäume im Abendlicht"
+               loading="eager" decoding="async" style="object-position:center 30%">
           <span class="ring"></span>
           <figcaption class="figcap">Bewegung nach außen</figcaption>
         </figure>
@@ -185,11 +184,8 @@
       </div>
       <div class="m reveal" style="--d:120ms">
         <figure class="figure tall">
-          <!-- Foto ersetzen: <img src="assets/portrait-2.jpg" alt="…" loading="lazy" decoding="async"> -->
-          <div class="ph" aria-hidden="true">
-            <span class="ph-ic">◎</span>
-            <span class="ph-t">Porträt Schwarzweiß<br>Hochformat 3:4</span>
-          </div>
+          <img src="assets/daniel-tor.jpg" alt="Daniel Kallenbach vor einem goldenen Tor in felsiger Landschaft"
+               loading="lazy" decoding="async" style="object-position:center 70%">
           <span class="ring"></span>
           <figcaption class="figcap">Die Rückkehr nach innen</figcaption>
         </figure>
@@ -252,20 +248,20 @@
     </div>
   </section>
 
-  <!-- ================= Bild-Band ================= -->
+  <!-- ================= Bild-Band =================
+       Ruht, bis ein Querformat-Foto mit Menschen da ist. Zum Aktivieren
+       die Kommentarklammern entfernen und den Pfad eintragen.
+
   <section class="photo-band">
     <div class="wrap">
       <figure class="figure reveal" style="aspect-ratio:16/10; border-radius:18px">
-        <!-- Foto ersetzen: <img src="assets/begegnung.jpg" alt="…" loading="lazy" decoding="async"> -->
-        <div class="ph" aria-hidden="true">
-          <span class="ph-ic">◎</span>
-          <span class="ph-t">Begegnungsfoto<br>Querformat 16:10</span>
-        </div>
+        <img src="assets/begegnung.jpg" alt="…" loading="lazy" decoding="async">
         <span class="ring"></span>
         <figcaption class="figcap">Echte Begegnung</figcaption>
       </figure>
     </div>
   </section>
+  -->
 
   <!-- ================= 07 — Der Ruf ================= -->
   <section class="call" id="gespraech">
