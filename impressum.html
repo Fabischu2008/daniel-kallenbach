@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Impressum — Daniel Kallenbach</title>
+<meta name="robots" content="noindex, follow">
+<meta name="theme-color" content="#08080a">
+<link rel="icon" href="assets/mark.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<style>
+  /* Rechtstext liest sich schmaler und ruhiger als die Startseite */
+  .legal-body{font-family:var(--sans); font-size:1rem; line-height:1.8; color:var(--ink-dim); max-width:62ch}
+  .legal-body h3{font-size:1.15rem; margin:2.4em 0 .6em; color:var(--ink)}
+  .legal-body a{color:var(--energy); text-decoration:none; border-bottom:1px solid var(--energy-line)}
+  .legal-body .todo{color:var(--ink-faint)}
+</style>
+</head>
+<body>
+
+<div id="atmos" aria-hidden="true"></div>
+<div id="vignette" aria-hidden="true"></div>
+
+<nav id="nav" class="scrolled">
+  <a class="brand" href="index.html" aria-label="Daniel Kallenbach — Startseite">
+    <img class="vmark" src="assets/mark.svg" alt="">
+    <span>Daniel&nbsp;Kallenbach</span>
+  </a>
+  <a class="btn beam" href="index.html#gespraech">Kostenloses Gespräch</a>
+</nav>
+
+<main class="shell">
+  <section>
+    <div class="wrap">
+      <p class="eyebrow">Rechtliches</p>
+      <h2>Impressum</h2>
+      <div class="legal-body">
+        <p class="todo">Platzhalter — bitte durch die echten Angaben ersetzen.</p>
+
+        <h3>Angaben gemäß § 5 DDG</h3>
+        <p>
+          Daniel Kallenbach<br>
+          [Straße und Hausnummer]<br>
+          [PLZ Ort]<br>
+          Deutschland
+        </p>
+
+        <h3>Kontakt</h3>
+        <p>
+          Telefon: [Telefonnummer]<br>
+          E-Mail: <a href="mailto:" data-mail>kontakt@daniel-kallenbach.de</a>
+        </p>
+
+        <h3>Umsatzsteuer-ID</h3>
+        <p>[USt-IdNr. gemäß § 27 a UStG — oder Hinweis auf Kleinunternehmerregelung]</p>
+
+        <h3>Verantwortlich für den Inhalt</h3>
+        <p>Daniel Kallenbach, Anschrift wie oben.</p>
+
+        <h3>Streitschlichtung</h3>
+        <p>Ich bin nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer Verbraucherschlichtungsstelle teilzunehmen.</p>
+
+        <h3>Haftung für Inhalte</h3>
+        <p>Als Diensteanbieter bin ich für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt.</p>
+
+        <h3>Hinweis</h3>
+        <p>Die Angebote auf dieser Website sind keine Psychotherapie und ersetzen keine medizinische oder psychologische Behandlung.</p>
+
+        <p style="margin-top:3em"><a href="index.html">← Zurück zur Startseite</a></p>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="js/color.js"></script>
+<script>
+  /* Nur die E-Mail-Platzhalter füllen — kein Energiefeld auf Rechtsseiten. */
+  document.querySelectorAll('[data-mail]').forEach(function (el) {
+    var mail = 'kontakt@daniel-kallenbach.de';
+    el.textContent = mail;
+    if (el.tagName === 'A') el.href = 'mailto:' + mail;
+  });
+</script>
+</body>
+</html>
