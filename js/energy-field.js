@@ -107,19 +107,20 @@
     var bodyBands = [], sphereBands = [], gridBands = [], bandColors = [];
     var gridCols = 0;
     var pointerR = 130, pointerR2 = pointerR * pointerR;
-    var progress = 0;
+    var builtW = 0, builtH = 0;
+    var progress = 0, target = 0, haveProgress = false;
 
     /* ------------------------------------------------------------------ */
     /* Aufbau: alle Zielformen einmal vorberechnen                         */
     /* ------------------------------------------------------------------ */
     function build() {
       DPR = Math.min(global.devicePixelRatio || 1, 1.5);
-      W = global.innerWidth;
-      H = global.innerHeight;
+      /* Maße vom Element, nicht von innerHeight: innerHeight wandert auf dem
+         Handy mit der Adressleiste, das Element steht dank lvh still. */
+      W = canvas.clientWidth || global.innerWidth;
+      H = canvas.clientHeight || global.innerHeight;
       canvas.width = Math.floor(W * DPR);
       canvas.height = Math.floor(H * DPR);
-      canvas.style.width = W + 'px';
-      canvas.style.height = H + 'px';
       ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
 
       scale = Math.min(H * 0.80, W * 1.05);
@@ -289,13 +290,20 @@
           if (!seen[key]) { seen[key] = 1; stoneLinks.push([a, nb]); }
         }
       }
+
+      builtW = W; builtH = H;
     }
 
     /* ------------------------------------------------------------------ */
     /* Zeiger — Partikel weichen dem Cursor aus                            */
     /* ------------------------------------------------------------------ */
     var ptr = { x: -9999, y: -9999, on: false };
-    function onPointerMove(e) { ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true; }
+    function onPointerMove(e) {
+      /* Nur die Maus schiebt Partikel. Ein Finger liegt beim Wischen ohnehin
+         auf dem Feld und würde es bei jeder Scrollgeste aufwühlen. */
+      if (e.pointerType && e.pointerType !== 'mouse') return;
+      ptr.x = e.clientX; ptr.y = e.clientY; ptr.on = true;
+    }
     function onPointerLeave() { ptr.on = false; ptr.x = -9999; }
 
     /* ------------------------------------------------------------------ */
@@ -304,7 +312,19 @@
     function draw(staticP) {
       ctx.clearRect(0, 0, W, H);
 
-      var p = (staticP != null) ? staticP : progress;
+      /* Scroll-Events kommen auf Touch-Geräten in groben Schüben. Der
+         Fortschritt zieht deshalb weich nach, statt sie eins zu eins zu
+         übernehmen. */
+      if (staticP != null) {
+        progress = target = staticP;
+      } else if (!reduce) {
+        var d = target - progress;
+        progress += (Math.abs(d) < 0.0004) ? d : d * 0.2;
+      } else {
+        progress = target;
+      }
+
+      var p = progress;
       var n = parts.length, i;
 
       var si = 0;
@@ -601,6 +621,9 @@
     function onResize() {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(function () {
+        /* Ein Neuaufbau würfelt alle Partikel neu aus und ist sichtbar.
+           Also nur, wenn sich die Bühne wirklich geändert hat. */
+        if (canvas.clientWidth === builtW && canvas.clientHeight === builtH) return;
         build();
         if (reduce) draw(0);
       }, 180);
@@ -615,7 +638,12 @@
     if (reduce) draw(0); else start();
 
     return {
-      setProgress: function (p) { progress = p; },
+      setProgress: function (p) {
+        target = p;
+        /* Beim ersten Wert nicht animieren — sonst fährt die Seite nach einem
+           Reload mit wiederhergestellter Scrollposition durch die ganze Reise. */
+        if (!haveProgress) { haveProgress = true; progress = p; }
+      },
       start: start,
       stop: stop
     };

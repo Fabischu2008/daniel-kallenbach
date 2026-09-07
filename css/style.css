@@ -46,7 +46,12 @@ body{
   background:radial-gradient(60% 50% at 50% 30%, hsl(var(--eh) var(--es) 50% / .10), transparent 70%);
   transition:background .6s linear;
 }
-#energyField{position:fixed; inset:0; width:100%; height:100%;
+/* Höhe bewusst über lvh statt inset:0 — mobile Browser verkleinern fixierte
+   Elemente mit sichtbarer Adressleiste, was das Feld sonst neu aufbaut. */
+/* width/height explizit: ein canvas ist ein ersetztes Element und würde bei
+   width:auto seine Eigenbreite behalten statt right:0 zu folgen. */
+#energyField{position:fixed; top:0; left:0; width:100%;
+  height:100vh; height:100lvh;
   z-index:1; pointer-events:none; display:block; opacity:0}
 #vignette{position:fixed; inset:0; z-index:2; pointer-events:none;
   background:
@@ -65,25 +70,28 @@ body{
 /* ---------- Navigation (ein Ziel) ---------- */
 nav{position:fixed; top:0; left:0; right:0; z-index:70;
   display:flex; align-items:center; justify-content:space-between;
-  padding:16px var(--pad);
+  padding:clamp(16px, 1.7vw, 27px) var(--pad);
   transition:background .45s var(--ease), backdrop-filter .45s var(--ease),
              border-color .45s var(--ease), padding .45s var(--ease);
   border-bottom:1px solid transparent;
 }
-nav.scrolled{padding-top:12px; padding-bottom:12px;
+nav.scrolled{padding-top:clamp(12px, 1.2vw, 19px); padding-bottom:clamp(12px, 1.2vw, 19px);
   background:rgba(8,8,11,.62); backdrop-filter:blur(16px) saturate(120%);
   -webkit-backdrop-filter:blur(16px) saturate(120%); border-bottom-color:var(--line);
 }
-.brand{font-family:var(--sans); font-weight:500; font-size:.74rem;
+.brand{font-family:var(--sans); font-weight:500;
+  font-size:clamp(.74rem, .63rem + .32vw, .95rem);
   letter-spacing:.32em; text-transform:uppercase; color:var(--ink);
-  text-decoration:none; white-space:nowrap; display:inline-flex; align-items:center; gap:13px;
+  text-decoration:none; white-space:nowrap; display:inline-flex; align-items:center;
+  gap:clamp(13px, 1.1vw, 19px);
 }
-.vmark{height:23px; width:auto; display:block; flex:0 0 auto;
+.vmark{height:clamp(23px, 2.3vw, 36px); width:auto; display:block; flex:0 0 auto;
   filter:drop-shadow(0 1px 6px rgba(0,0,0,.45))}
 
 /* ---------- Buttons (eine Form, ein Akzent) ---------- */
 .btn{--ba:.12;
-  font-family:var(--sans); font-weight:500; font-size:.82rem;
+  font-family:var(--sans); font-weight:500;
+  font-size:clamp(.82rem, .75rem + .21vw, .96rem);
   letter-spacing:.04em; color:var(--ink); text-decoration:none; white-space:nowrap;
   display:inline-flex; align-items:center; justify-content:center; gap:.55em;
   padding:.92em 1.55em; border-radius:999px; cursor:pointer;
@@ -98,8 +106,8 @@ nav.scrolled{padding-top:12px; padding-bottom:12px;
 .btn:active{transform:scale(.97)}
 .btn .arr{transition:transform .3s var(--ease)}
 .btn:hover .arr{transform:translateX(4px)}
-.btn-lg{padding:1.05em 2em; font-size:.92rem}
-nav .btn{padding:.66em 1.2em; font-size:.74rem}
+.btn-lg{padding:1.05em 2em; font-size:clamp(.92rem, .84rem + .28vw, 1.1rem)}
+nav .btn{padding:.8em 1.5em; font-size:clamp(.74rem, .66rem + .27vw, .94rem)}
 .btn-ghost{background:transparent; border-color:var(--line-2); color:var(--ink-dim)}
 .btn-ghost:hover{color:var(--ink); border-color:hsl(var(--eh) var(--es) var(--el) / .55); box-shadow:none}
 
@@ -125,7 +133,10 @@ nav .btn{padding:.66em 1.2em; font-size:.74rem}
 @media (prefers-reduced-motion: reduce){ .beam::before{animation:none} }
 
 /* ---------- Primitives ---------- */
-section{position:relative; padding-block:clamp(96px, 15vh, 200px); scroll-margin-top:88px}
+/* scroll-margin folgt der Navigationshöhe, sonst verschwindet die
+   Überschrift beim Ankersprung unter der fixierten Leiste. */
+section{position:relative; padding-block:clamp(96px, 15vh, 200px);
+  scroll-margin-top:clamp(88px, 8vw, 118px)}
 .wrap{max-width:var(--maxw); margin-inline:auto; padding-inline:var(--pad)}
 .measure{max-width:60ch}
 .eyebrow{font-family:var(--sans); font-weight:500; font-size:.72rem;
@@ -153,7 +164,8 @@ p{margin:0 0 1.1em}
 
 /* ---------- Hero ---------- */
 .hero{position:relative; overflow:hidden; min-height:100svh;
-  display:flex; align-items:flex-end; padding-block:150px clamp(56px,9vh,108px)}
+  display:flex; align-items:flex-end;
+  padding-block:clamp(150px, 13vw, 210px) clamp(56px,9vh,108px)}
 .hero-media{position:absolute; inset:0; z-index:0}
 .hero-media img{width:100%; height:100%; object-fit:cover; object-position:center 28%; display:block}
 .hero-media::after{content:""; position:absolute; inset:0;

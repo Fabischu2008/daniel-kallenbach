@@ -37,8 +37,15 @@
   var hero = document.getElementById('hero');
   var pending = false;
 
+  /* Ruhige Bezugshöhe: innerHeight wächst und schrumpft auf dem Handy mit der
+     Adressleiste, und jede Änderung würde den Fortschritt verschieben. */
+  function viewportHeight() {
+    return (canvas && canvas.clientHeight) || window.innerHeight;
+  }
+  var viewH = viewportHeight();
+
   function onScroll() {
-    var max = document.documentElement.scrollHeight - window.innerHeight;
+    var max = document.documentElement.scrollHeight - viewH;
     var p = max > 0 ? Math.max(0, Math.min(1, window.scrollY / max)) : 0;
 
     /* Das Energiefeld startet erst nach dem Hero und bekommt dann den
@@ -63,6 +70,11 @@
 
   window.addEventListener('scroll', function () {
     if (!pending) { pending = true; requestAnimationFrame(onScroll); }
+  }, { passive: true });
+
+  window.addEventListener('resize', function () {
+    viewH = viewportHeight();
+    onScroll();
   }, { passive: true });
 
   /* ---- Rotierendes Wort im Hero ---------------------------------------- */
