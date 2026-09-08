@@ -4,8 +4,9 @@
    ========================================================================== */
 
 :root{
-  /* Energie — Farbton wird per JS aus dem Scroll-Fortschritt gesetzt */
-  --eh: 24; --es: 90%; --el: 56%;
+  /* Energie — Farbton wird per JS aus dem Scroll-Fortschritt gesetzt.
+     Startwert ist das Orange #FF9130, Ziel am Seitenende #309EFF. */
+  --eh: 28.1; --es: 100%; --el: 59.4%;
   --energy:      hsl(var(--eh) var(--es) var(--el));
   --energy-soft: hsl(var(--eh) var(--es) var(--el) / .14);
   --energy-line: hsl(var(--eh) var(--es) var(--el) / .50);

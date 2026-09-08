@@ -5,13 +5,17 @@
 (function (global) {
   "use strict";
 
-  /* Interface-Akzent: ruhiger Pfad Orange -> Violett (Buttons, Labels, Linien) */
+  /* Interface-Akzent: Orange #FF9130 -> Blau #309EFF (Buttons, Labels, Linien).
+     Der Weg führt bewusst über Rot, Magenta und Violett — die Gegenrichtung
+     liefe über Gelb und Grün und passt nicht zum Energiefeld.
+     Ab 0.88 steht die Farbe still, damit der Seitenfuß satt im Blau liegt. */
   var UI = [
-    { p: 0.00, h:  24, s: 90, l: 56 },
-    { p: 0.30, h:  36, s: 84, l: 60 },
-    { p: 0.55, h:  12, s: 74, l: 64 },
-    { p: 0.78, h: 320, s: 60, l: 64 },
-    { p: 1.00, h: 272, s: 62, l: 62 }
+    { p: 0.00, h:  28.1, s: 100, l: 59.4 },   /* #FF9130 */
+    { p: 0.24, h:  16,   s:  92, l: 61   },
+    { p: 0.46, h: 344,   s:  80, l: 63   },
+    { p: 0.68, h: 292,   s:  72, l: 63   },
+    { p: 0.88, h: 208.1, s: 100, l: 59.4 },   /* #309EFF */
+    { p: 1.00, h: 208.1, s: 100, l: 59.4 }
   ];
 
   /* Energiefeld: kosmisch — Rot oben, Magenta in der Mitte, Blau unten */
