@@ -104,7 +104,10 @@
 
     var W = 0, H = 0, DPR = 1, scale = 0, ox = 0, oy = 0;
     var parts = [], gridLinks = [], stoneLinks = [];
-    var bodyBands = [], sphereBands = [], gridBands = [], bandColors = [];
+    var bodyBands = [], sphereBands = [], gridBands = [];
+    /* bandColors wird pro Bild aus diesen beiden Paletten gemischt. */
+    var bandCosmic = [], bandBlue = [], bandColors = [];
+    var latticeStroke = 'hsl(256,56%,60%)';
     var gridCols = 0;
     var pointerR = 130, pointerR2 = pointerR * pointerR;
     var builtW = 0, builtH = 0;
@@ -250,9 +253,13 @@
       }
 
       /* --- Farbbänder: acht horizontale Zonen pro Form ------------------ */
-      bandColors = [];
+      bandCosmic = []; bandBlue = []; bandColors = [];
       for (var cb = 0; cb < 8; cb++) {
-        bandColors.push(color.css(color.ramp(color.COSMIC, (cb + 0.5) / 8)));
+        bandCosmic.push(color.ramp(color.COSMIC, (cb + 0.5) / 8));
+        /* Ziel am Seitenende: rings um #309EFF, nur leicht gestaffelt — sonst
+           wäre das Gitternetz unten flächig einfarbig statt räumlich. */
+        bandBlue.push({ h: 222 - (cb / 7) * 28, s: 100, l: 59.4 });
+        bandColors.push('');
       }
       sphereBands = [[], [], [], [], [], [], [], []];
       gridBands = [[], [], [], [], [], [], [], []];
@@ -326,6 +333,24 @@
 
       var p = progress;
       var n = parts.length, i;
+
+      /* Das Feld läuft mit der Seite ins Blau, damit Gitternetz und
+         Bedienelemente unten dieselbe Farbe sprechen. Der Übergang liegt
+         hinter dem Stein, der so seine magentafarbene Phase behält. */
+      var blueMix = smoothstep((p - 0.55) / 0.35);
+      for (i = 0; i < 8; i++) {
+        var bc = bandCosmic[i], bb = bandBlue[i];
+        bandColors[i] = color.css({
+          h: color.lerpHue(bc.h, bb.h, blueMix),
+          s: bc.s + (bb.s - bc.s) * blueMix,
+          l: bc.l + (bb.l - bc.l) * blueMix
+        });
+      }
+      latticeStroke = color.css({
+        h: color.lerpHue(256, 212, blueMix),
+        s: 56 + 18 * blueMix,
+        l: 60 - 2 * blueMix
+      });
 
       var si = 0;
       while (si < KEYFRAMES.length - 2 && p > KEYFRAMES[si + 1].p) si++;
@@ -558,7 +583,7 @@
       var lineAlpha = lp * strength * alpha;
       if (links && lineAlpha > 0.006) {
         ctx.globalAlpha = Math.min(0.72, lineAlpha);
-        ctx.strokeStyle = 'hsl(256,56%,60%)';
+        ctx.strokeStyle = latticeStroke;
         ctx.lineWidth = 1;
         ctx.beginPath();
         /* Zu lange Linien überspringen — sonst zieht der Morph Striche

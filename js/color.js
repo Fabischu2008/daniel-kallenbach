@@ -48,5 +48,5 @@
     return 'hsl(' + c.h.toFixed(0) + ',' + c.s.toFixed(0) + '%,' + c.l.toFixed(0) + '%)';
   }
 
-  global.DKColor = { UI: UI, COSMIC: COSMIC, ramp: ramp, css: css };
+  global.DKColor = { UI: UI, COSMIC: COSMIC, ramp: ramp, css: css, lerpHue: lerpHue };
 })(window);
