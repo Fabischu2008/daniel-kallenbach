@@ -81,7 +81,7 @@
   (function () {
     var el = document.getElementById('rotor');
     if (!el || reduce) return;
-    var words = ['Bewusstsein', 'Präsenz', 'Wahrheit', 'Wirkung', 'Lebendigkeit', 'Freiheit'];
+    var words = ['Bewusstsein', 'Verantwortung', 'Klarheit', 'Wirkung', 'Selbsterkenntnis', 'Freiheit'];
     var i = 0;
     setInterval(function () {
       el.classList.add('out');
