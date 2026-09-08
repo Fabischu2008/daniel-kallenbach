@@ -107,7 +107,7 @@
     var bodyBands = [], sphereBands = [], gridBands = [];
     /* bandColors wird pro Bild aus diesen beiden Paletten gemischt. */
     var bandCosmic = [], bandBlue = [], bandColors = [];
-    var latticeStroke = 'hsl(256,56%,60%)';
+    var latticeStroke = 'hsl(208,60%,58%)';
     var gridCols = 0;
     var pointerR = 130, pointerR2 = pointerR * pointerR;
     var builtW = 0, builtH = 0;
@@ -256,9 +256,9 @@
       bandCosmic = []; bandBlue = []; bandColors = [];
       for (var cb = 0; cb < 8; cb++) {
         bandCosmic.push(color.ramp(color.COSMIC, (cb + 0.5) / 8));
-        /* Ziel am Seitenende: rings um #309EFF, nur leicht gestaffelt — sonst
-           wäre das Gitternetz unten flächig einfarbig statt räumlich. */
-        bandBlue.push({ h: 222 - (cb / 7) * 28, s: 100, l: 59.4 });
+        /* Ziel am Seitenende: durchgehend #309EFF, nur in der Helligkeit
+           gestaffelt — sonst wirkte das Gitternetz unten flach statt räumlich. */
+        bandBlue.push({ h: color.BLAU.h, s: 100, l: 50 + (cb / 7) * 18 });
         bandColors.push('');
       }
       sphereBands = [[], [], [], [], [], [], [], []];
@@ -339,18 +339,9 @@
          hinter dem Stein, der so seine magentafarbene Phase behält. */
       var blueMix = smoothstep((p - 0.55) / 0.35);
       for (i = 0; i < 8; i++) {
-        var bc = bandCosmic[i], bb = bandBlue[i];
-        bandColors[i] = color.css({
-          h: color.lerpHue(bc.h, bb.h, blueMix),
-          s: bc.s + (bb.s - bc.s) * blueMix,
-          l: bc.l + (bb.l - bc.l) * blueMix
-        });
+        bandColors[i] = color.css(color.mix(bandCosmic[i], bandBlue[i], blueMix));
       }
-      latticeStroke = color.css({
-        h: color.lerpHue(256, 212, blueMix),
-        s: 56 + 18 * blueMix,
-        l: 60 - 2 * blueMix
-      });
+      latticeStroke = color.css({ h: color.BLAU.h, s: 44 + 32 * blueMix, l: 58 });
 
       var si = 0;
       while (si < KEYFRAMES.length - 2 && p > KEYFRAMES[si + 1].p) si++;
@@ -468,7 +459,7 @@
 
       /* Funkeln — einzelne Knoten pulsieren auf, am stärksten im Gitter */
       if (!bodyDom && !dnaDom && maxP > 0.3) {
-        ctx.fillStyle = 'hsl(205,82%,74%)';
+        ctx.fillStyle = 'hsl(208,90%,76%)';
         var strength = 0.35 + 0.85 * gridP;
         ctx.globalAlpha = Math.min(0.8, 0.5 * alpha);
         ctx.beginPath();
@@ -488,7 +479,8 @@
     }
 
     /* --- DNA: rotierende Plasma-Doppelhelix in vier Tiefenschichten ----- */
-    var DNA_COLORS = ['hsl(224,84%,50%)', 'hsl(206,88%,62%)', 'hsl(194,94%,76%)', 'hsl(190,78%,90%)'];
+    /* Vier Tiefenschichten, alle aus dem Blau — hinten dunkel, vorn fast weiß */
+    var DNA_COLORS = ['hsl(208,88%,38%)', 'hsl(208,100%,59%)', 'hsl(206,100%,76%)', 'hsl(204,92%,91%)'];
     function drawDNA(n, alpha) {
       var layers = [[], [], [], []], i;
       for (i = 0; i < n; i++) {
@@ -523,12 +515,12 @@
       var yTop = oy + scale * 0.26, yBot = oy + scale * 0.74, r = scale * 0.42;
 
       var gTop = ctx.createRadialGradient(ox, yTop, 0, ox, yTop, r);
-      gTop.addColorStop(0, 'rgba(196,52,92,' + (0.11 * a).toFixed(3) + ')');
+      gTop.addColorStop(0, 'rgba(255,145,48,' + (0.09 * a).toFixed(3) + ')');
       gTop.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = gTop; ctx.fillRect(0, 0, W, H);
 
       var gBot = ctx.createRadialGradient(ox, yBot, 0, ox, yBot, r);
-      gBot.addColorStop(0, 'rgba(54,104,205,' + (0.11 * a).toFixed(3) + ')');
+      gBot.addColorStop(0, 'rgba(48,158,255,' + (0.11 * a).toFixed(3) + ')');
       gBot.addColorStop(1, 'rgba(0,0,0,0)');
       ctx.fillStyle = gBot; ctx.fillRect(0, 0, W, H);
 
