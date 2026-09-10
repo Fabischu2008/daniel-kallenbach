@@ -1,16 +1,21 @@
 /* ==========================================================================
    ENERGIEFELD — eine durchgehende Reise über die ganze Seite.
 
-   Ein einziges Partikelsystem (2D-Canvas, kein WebGL) morpht scrollgesteuert:
+   Ein einziges Partikelsystem (2D-Canvas, kein WebGL) morpht scrollgesteuert
+   durch vier Formen. Die Folge ist an Daniels Text entlang gebaut:
 
-       DNA-Doppelhelix  ->  löst sich auf
-    -> Energiekörper    ->  löst sich auf
-    -> Stein / Sphäre   ->  löst sich auf
-    -> Gitternetz
+       Sog        Spiralscheibe um einen Kern
+                  "Where your attention goes, your energy follows."
+    -> Aura       aufrechtes Feld aus geschachtelten Schalen
+                  "Was du bist, strahlst du aus."
+    -> Torus      in sich geschlossener, rotierender Ring
+                  Die Kraft, die nicht mehr nach außen abgegeben wird.
+    -> Wellenfeld Dreiecksnetz, durch das Ringwellen laufen
+                  "Jeder Raum, den du betrittst, verändert sich."
 
    Jedes Partikel kennt seine Zielkoordinate in JEDER Form gleichzeitig und
    wird zwischen zwei Zielen interpoliert. Die Farbe wandert dabei über acht
-   horizontale Bänder von Rot nach Blau.
+   horizontale Bänder vom Orange ins Blau.
    ========================================================================== */
 (function (global) {
   "use strict";
@@ -19,10 +24,10 @@
 
   /* --- Keyframes: Scroll-Fortschritt -> Form. `sc*` sind Streuwolken. ------ */
   var KEYFRAMES = [
-    { p: 0.00, k: 'dna'   }, { p: 0.13, k: 'dna'   }, { p: 0.22, k: 'scD' },
-    { p: 0.30, k: 'body'  }, { p: 0.42, k: 'body'  }, { p: 0.50, k: 'scA' },
-    { p: 0.59, k: 'stone' }, { p: 0.69, k: 'stone' }, { p: 0.78, k: 'scB' },
-    { p: 0.87, k: 'grid'  }, { p: 1.01, k: 'grid'  }
+    { p: 0.00, k: 'sog'   }, { p: 0.13, k: 'sog'   }, { p: 0.22, k: 'scD' },
+    { p: 0.30, k: 'aura'  }, { p: 0.42, k: 'aura'  }, { p: 0.50, k: 'scA' },
+    { p: 0.59, k: 'torus' }, { p: 0.69, k: 'torus' }, { p: 0.78, k: 'scB' },
+    { p: 0.87, k: 'welle' }, { p: 1.01, k: 'welle' }
   ];
 
   function smoothstep(x) {
@@ -39,60 +44,6 @@
   }
 
   /* ---------------------------------------------------------------------- */
-  /* Silhouette: der Körper ist nicht gesampelt, sondern aus Ellipsen und    */
-  /* Kapseln zusammengesetzt. Koordinaten sind normalisiert (0..1).          */
-  /* ---------------------------------------------------------------------- */
-
-  function inEllipse(px, py, cx, cy, rx, ry) {
-    var a = (px - cx) / rx, b = (py - cy) / ry;
-    return a * a + b * b < 1;
-  }
-
-  /* Kapsel zwischen zwei Punkten, Breite läuft von wa nach wb */
-  function inCapsule(px, py, ax, ay, bx, by, wa, wb) {
-    var dx = bx - ax, dy = by - ay, l2 = dx * dx + dy * dy;
-    var t = l2 > 0 ? ((px - ax) * dx + (py - ay) * dy) / l2 : 0;
-    t = t < 0 ? 0 : (t > 1 ? 1 : t);
-    var qx = ax + dx * t, qy = ay + dy * t, w = wa + (wb - wa) * t;
-    return Math.hypot(px - qx, py - qy) < w;
-  }
-
-  /* Halbe Torso-Breite auf Höhe y — Schulter, Taille, Hüfte */
-  var TORSO = [[0.214, 0.082], [0.265, 0.088], [0.345, 0.072], [0.430, 0.084], [0.520, 0.088]];
-  function torsoHalfWidth(y) {
-    if (y < TORSO[0][0] || y > TORSO[TORSO.length - 1][0]) return 0;
-    for (var i = 0; i < TORSO.length - 1; i++) {
-      if (y >= TORSO[i][0] && y <= TORSO[i + 1][0]) {
-        var t = (y - TORSO[i][0]) / (TORSO[i + 1][0] - TORSO[i][0]);
-        return TORSO[i][1] + (TORSO[i + 1][1] - TORSO[i][1]) * t;
-      }
-    }
-    return 0;
-  }
-
-  function inBody(x, y) {
-    if (inEllipse(x, y, 0.5, 0.100, 0.050, 0.054)) return true;             // Schädel
-    if (inEllipse(x, y, 0.5, 0.133, 0.035, 0.028)) return true;             // Kiefer
-    if (inCapsule(x, y, 0.5, 0.155, 0.5, 0.202, 0.026, 0.031)) return true; // Hals
-    if (inCapsule(x, y, 0.50, 0.214, 0.620, 0.256, 0.052, 0.040)) return true; // Schulter r
-    if (inCapsule(x, y, 0.50, 0.214, 0.380, 0.256, 0.052, 0.040)) return true; // Schulter l
-    if (y >= 0.214 && y <= 0.520 && Math.abs(x - 0.5) < torsoHalfWidth(y)) return true;
-    if (inCapsule(x, y, 0.636, 0.272, 0.646, 0.452, 0.036, 0.028)) return true; // Oberarm r
-    if (inCapsule(x, y, 0.646, 0.452, 0.640, 0.600, 0.028, 0.021)) return true; // Unterarm r
-    if (inEllipse(x, y, 0.638, 0.644, 0.034, 0.046)) return true;               // Hand r
-    if (inCapsule(x, y, 0.364, 0.272, 0.354, 0.452, 0.036, 0.028)) return true; // Oberarm l
-    if (inCapsule(x, y, 0.354, 0.452, 0.360, 0.600, 0.028, 0.021)) return true; // Unterarm l
-    if (inEllipse(x, y, 0.362, 0.644, 0.034, 0.046)) return true;               // Hand l
-    if (inCapsule(x, y, 0.556, 0.515, 0.550, 0.715, 0.066, 0.045)) return true; // Oberschenkel r
-    if (inCapsule(x, y, 0.550, 0.715, 0.546, 0.928, 0.045, 0.026)) return true; // Wade r
-    if (inEllipse(x, y, 0.560, 0.950, 0.048, 0.021)) return true;               // Fuß r
-    if (inCapsule(x, y, 0.444, 0.515, 0.450, 0.715, 0.066, 0.045)) return true; // Oberschenkel l
-    if (inCapsule(x, y, 0.450, 0.715, 0.454, 0.928, 0.045, 0.026)) return true; // Wade l
-    if (inEllipse(x, y, 0.440, 0.950, 0.048, 0.021)) return true;               // Fuß l
-    return false;
-  }
-
-  /* ---------------------------------------------------------------------- */
 
   function init(canvas, options) {
     var ctx = canvas && canvas.getContext('2d', { alpha: true });
@@ -103,15 +54,22 @@
     var color = global.DKColor;
 
     var W = 0, H = 0, DPR = 1, scale = 0, ox = 0, oy = 0;
-    var parts = [], gridLinks = [], stoneLinks = [];
-    var bodyBands = [], sphereBands = [], gridBands = [];
+    var parts = [], welleLinks = [], torusLinks = [];
+    var auraBands = [], torusBands = [], welleBands = [];
     /* bandColors wird pro Bild aus diesen beiden Paletten gemischt. */
     var bandCosmic = [], bandBlue = [], bandColors = [];
     var latticeStroke = 'hsl(208,60%,58%)';
-    var gridCols = 0;
     var pointerR = 130, pointerR2 = pointerR * pointerR;
     var builtW = 0, builtH = 0;
     var progress = 0, target = 0, haveProgress = false;
+
+    /* Formabhängige Kennwerte, in build() gesetzt */
+    var sogAmp = 0, sogCy = 0;
+    var auraRx = 0, auraRy = 0, auraCy = 0;
+    var torusR = 0, torusCy = 0, torusTube = 0.36;
+    var welleCx = 0, welleCy = 0, welleK = 0, welleAmp = 0;
+    var torusMaxLen2 = 0, welleMaxLen2 = 0;
+    var hell = 1;
 
     /* ------------------------------------------------------------------ */
     /* Aufbau: alle Zielformen einmal vorberechnen                         */
@@ -128,175 +86,183 @@
 
       scale = Math.min(H * 0.80, W * 1.05);
       ox = W * 0.5;
-      oy = H * 0.10;
+      /* Die Formen sitzen leicht über der Mitte, damit der Text darüber Luft
+         hat. Am Bildschirm ausgerichtet, nicht an `scale`: auf schmalen
+         Geräten ist scale von der Breite begrenzt, und die Formen würden
+         sonst oben kleben. */
+      oy = H * 0.45;
       pointerR = (W < 760) ? 90 : 130;
       pointerR2 = pointerR * pointerR;
 
       var N = (W < 760) ? 780 : 1500;
+      /* Additives Blending baut Helligkeit aus Überlappungen auf. Mit halber
+         Partikelzahl fehlt sie, also wird sie am Handy nachgegeben. */
+      hell = (W < 760) ? 1.3 : 1;
+      var i;
 
-      /* --- Körper: Kante zuerst ---------------------------------------
-         Erst das Raster abtasten und Rand- von Innenzellen trennen. 60 %
-         der Partikel landen später auf der Kante — das ist der Grund,
-         warum die Figur überhaupt als Figur lesbar ist.                  */
-      var edgeCells = [], innerCells = [];
-      var GX = 140, GY = 250, offX = 0.18, spanX = 0.64;
-      for (var gy = 0; gy < GY; gy++) {
-        for (var gx = 0; gx < GX; gx++) {
-          var cx = offX + (gx + 0.5) / GX * spanX;
-          var cy = (gy + 0.5) / GY;
-          if (!inBody(cx, cy)) continue;
-          var isEdge = !inBody(cx + 0.0055, cy) || !inBody(cx - 0.0055, cy) ||
-                       !inBody(cx, cy + 0.0042) || !inBody(cx, cy - 0.0042);
-          (isEdge ? edgeCells : innerCells).push([cx, cy]);
-        }
-      }
-
-      var body = [], bodyBand = [], bodyRim = [];
-      var rimCount = Math.round(N * 0.60);
-      function pushBody(nx, ny, rim) {
-        body.push([ox + (nx - 0.5) * scale, oy + ny * scale]);
-        bodyBand.push(ny < 0.999 ? (ny * 8 | 0) : 7);
-        bodyRim.push(rim ? 1 : 0);
-      }
-      for (var bi = 0; bi < N; bi++) {
-        if (bi < rimCount && edgeCells.length) {
-          var e = edgeCells[(Math.random() * edgeCells.length) | 0];
-          pushBody(e[0] + (Math.random() - 0.5) * 0.006,
-                   e[1] + (Math.random() - 0.5) * 0.005, true);
-        } else if (innerCells.length) {
-          var c = innerCells[(Math.random() * innerCells.length) | 0];
-          pushBody(c[0], c[1], false);
-        } else {
-          pushBody(0.5, 0.5, false);
-        }
-      }
-
-      /* --- Sphäre: Fibonacci-Verteilung auf der Einheitskugel ---------- */
-      var sphere = [], golden = 2.399963229728653;
-      for (var qi = 0; qi < N; qi++) {
-        var sy = 1 - (qi / (N - 1)) * 2;
-        var sr = Math.sqrt(Math.max(0, 1 - sy * sy));
-        var th = qi * golden;
-        sphere.push([Math.cos(th) * sr, sy, Math.sin(th) * sr]);
-      }
-
-      /* --- Gitternetz -------------------------------------------------- */
-      var Gw = W * 1.06, Gh = H * 1.06;
-      var gx0 = W * 0.5 - Gw / 2, gy0 = H * 0.5 - Gh / 2;
-      gridCols = Math.max(4, Math.round(Math.sqrt(N * Gw / Gh)));
-      var stepX = Gw / (gridCols - 1);
-      var gridRows = Math.ceil(N / gridCols);
-      var stepY = Gh / Math.max(1, gridRows - 1);
-      var grid = [];
-      for (var gi = 0; gi < N; gi++) {
-        grid.push([gx0 + (gi % gridCols) * stepX, gy0 + Math.floor(gi / gridCols) * stepY]);
-      }
-
-      /* --- DNA-Helix: Parameter ---------------------------------------- */
-      var dnaAmp = scale * 0.158, dnaTube = scale * 0.0316;
-      var rungs = 13;
-      var perRung = Math.max(3, Math.round(N * 0.16 / rungs));
-      var rungTotal = perRung * rungs;
-      var ambient = Math.round(N * 0.06);
-      var strandTotal = N - rungTotal - ambient;
-      var perStrand = strandTotal >> 1;
-      /* grobe Normalverteilung, damit die Stränge Volumen bekommen */
+      /* grobe Normalverteilung für Streuung und Volumen */
       function gauss() { return (Math.random() + Math.random() + Math.random() - 1.5) * 0.82; }
+
+      /* ---------------------------------------------------------------
+         SOG — Spiralarme auf einer geneigten Scheibe.
+         Jedes Partikel merkt sich Radius, Armwinkel und Höhe im Wulst;
+         die Bildschirmlage entsteht erst pro Bild in draw().            */
+      sogAmp = scale * 0.42;
+      sogCy = oy;
+      var ARME = 3;
+
+      /* ---------------------------------------------------------------
+         AURA — geschachtelte Schalen auf einem aufrechten Ovoid.
+         Bewusst keine Gliedmaßen, kein Kopf: nur ein Feld, das strahlt. */
+      auraRx = scale * 0.192;
+      auraRy = scale * 0.352;
+      auraCy = oy + scale * 0.02;
+      /* Punkte gleichmäßig auf der Kugel (Fibonacci), später aufs Ovoid gezogen */
+      var kugel = [], golden = 2.399963229728653;
+      for (i = 0; i < N; i++) {
+        var sy = 1 - (i / (N - 1)) * 2;
+        var sr = Math.sqrt(Math.max(0, 1 - sy * sy));
+        var th = i * golden;
+        kugel.push([Math.cos(th) * sr, sy, Math.sin(th) * sr]);
+      }
+
+      /* ---------------------------------------------------------------
+         TORUS — Gitter aus nu Schritten um den Ring und nv um die Röhre.
+         Das Verhältnis folgt den Umfängen, sonst wird die Masche schief. */
+      torusR = scale * 0.30;
+      torusCy = oy + scale * 0.02;
+      var nu = Math.max(12, Math.round(Math.sqrt(N / torusTube)));
+      var nv = Math.max(6, Math.ceil(N / nu));
+
+      /* ---------------------------------------------------------------
+         WELLENFELD — Dreiecksnetz statt Quadratgitter: versetzte Reihen
+         ergeben drei Nachbarn statt zwei und damit eine ganz andere
+         Maschenform. Ringwellen laufen später radial hindurch.          */
+      /* Dreiecksmaschen haben drei Nachbarn statt zwei und wirken dadurch
+         schnell zu dicht. Das Feld greift deshalb etwas über den Rand
+         hinaus, was die Dichte auf dem Schirm senkt. */
+      var flaeche = (W * 1.3) * (H * 1.3);
+      var stepX = Math.sqrt(flaeche / N / 0.866);
+      var stepY = stepX * 0.866;
+      var cols = Math.max(4, Math.ceil(W * 1.3 / stepX));
+      var rows = Math.max(4, Math.ceil(N / cols));
+      var wx0 = W * 0.5 - (cols - 1) * stepX * 0.5;
+      var wy0 = H * 0.5 - (rows - 1) * stepY * 0.5;
+      welleCx = W * 0.5;
+      welleCy = H * 0.44;
+      welleK = TAU / (scale * 0.34);
+      welleAmp = scale * 0.038;
 
       /* --- Partikel ---------------------------------------------------- */
       parts = [];
-      bodyBands = [[], [], [], [], [], [], [], []];
-      for (var pi = 0; pi < N; pi++) {
-        var rim = bodyRim[pi];
-        var star = !rim && Math.random() < 0.14;
-        var sz = star ? (1.8 + Math.random() * 1.3)
-                      : (rim ? (1.0 + Math.random() * 0.7) : (0.8 + Math.random() * 0.8));
+      auraBands = [[], [], [], [], [], [], [], []];
+      for (i = 0; i < N; i++) {
+        var stern = Math.random() < 0.16;
+        var sz = stern ? (1.7 + Math.random() * 1.3) : (0.85 + Math.random() * 0.85);
 
-        var role, phase = 0, t, jitter = 0, u = 0, offX2, offY2;
-        if (pi < strandTotal) {                       // Strang
-          var si = (pi < perStrand) ? pi : (pi - perStrand);
-          role = 0;
-          phase = (pi < perStrand) ? 0 : Math.PI;
-          t = (si + Math.random()) / perStrand;
-          jitter = (Math.random() - 0.5) * 0.14;
-          offX2 = gauss() * dnaTube;
-          offY2 = gauss() * dnaTube * 1.05;
-        } else if (pi < strandTotal + rungTotal) {    // Sprosse
-          var ri = pi - strandTotal;
-          role = 2;
-          t = (Math.floor(ri / perRung) + 0.5) / rungs + (Math.random() - 0.5) * 0.02;
-          u = (perRung > 1) ? ((ri % perRung) / (perRung - 1)) : 0.5;
-          offX2 = gauss() * dnaTube * 0.5;
-          offY2 = gauss() * dnaTube * 0.5;
-        } else {                                      // Plasma drumherum
-          role = 1;
-          phase = Math.random() * TAU;
-          t = Math.random();
-          jitter = (Math.random() - 0.5) * 0.5;
-          offX2 = gauss() * dnaAmp * 1.5;
-          offY2 = gauss() * dnaAmp * 1.5;
-        }
+        /* --- Sog: ein Fünftel bildet den leuchtenden Kern, der Rest die
+           Arme. Die Streuung wächst nach außen, damit die Arme auffächern
+           statt als dünne Linien zu enden. */
+        var imKern = Math.random() < 0.20;
+        var sogR = imKern ? Math.abs(gauss()) * 0.15
+                          : 0.12 + Math.pow(Math.random(), 0.85) * 0.88;
+        var sogA = imKern
+          ? Math.random() * TAU
+          : (Math.floor(Math.random() * ARME) / ARME) * TAU + gauss() * (0.13 + 0.32 * sogR);
+
+        /* --- Aura: Schwerpunkt auf der äußeren Schale. Innen bleibt es
+           dünn, damit man hindurchsieht — ein Feld, kein Körper. */
+        var u = Math.random();
+        var schale = u < 0.74 ? 1.0 : (u < 0.91 ? 0.70 : 0.40);
+        schale += gauss() * 0.035;
+        var k = kugel[i];
+        /* oben etwas schmaler, damit das Feld aufrecht wirkt statt kugelig */
+        var taper = 1 - 0.18 * Math.max(0, k[1]);
+
+        /* --- Torus */
+        var ui = (i % nu) / nu * TAU;
+        var vi = Math.floor(i / nu) / nv * TAU;
+
+        /* --- Wellenfeld: versetzte Reihen */
+        var row = Math.floor(i / cols), col = i % cols;
+        var wxh = wx0 + (col + (row & 1 ? 0.5 : 0)) * stepX;
+        var wyh = wy0 + row * stepY;
+        var wdx = wxh - welleCx, wdy = wyh - welleCy;
+        var wd = Math.hypot(wdx, wdy) || 1;
+
+        var band = Math.min(7, Math.max(0, ((1 - k[1]) * 0.5 * 8) | 0));
 
         parts.push({
-          body: body[pi], sphere: sphere[pi], grid: grid[pi],
-          band: bodyBand[pi], star: star, rim: rim,
-          dnaT: t, dnaPhase: phase, dnaJitter: jitter, dnaU: u,
-          dnaOX: offX2, dnaOY: offY2, dnaRole: role, depth: 0,
+          /* Sog */
+          sogR: sogR, sogA: sogA,
+          sogY: gauss() * sogAmp * 0.10 * (1 - 0.55 * sogR),
+          /* Aura: `aSch` steuert Größe und Helligkeit, damit die äußere
+             Schale die Form zeichnet und die inneren nur dahinter glimmen. */
+          aur: [k[0] * schale * taper, k[1] * schale, k[2] * schale * taper],
+          aSch: Math.max(0, Math.min(1, schale)),
+          /* Torus */
+          tu: ui, tv: vi,
+          /* Wellenfeld: Ruhelage plus Richtung nach außen */
+          wx: wxh, wy: wyh, wd: wd, wnx: wdx / wd, wny: wdy / wd,
+
+          band: band, star: stern, depth: 0, dmul: 1,
           scA: [W * (-0.1 + 1.2 * Math.random()), H * (-0.1 + 1.2 * Math.random())],
           scB: [W * (-0.1 + 1.2 * Math.random()), H * (-0.1 + 1.2 * Math.random())],
           scD: [W * (-0.1 + 1.2 * Math.random()), H * (-0.1 + 1.2 * Math.random())],
-          x: ox, y: oy + t * scale * 0.70,
-          vx: 0, vy: 0, sz: sz, halo: sz * 2.2, dmul: 1,
+          x: ox, y: sogCy,
+          vx: 0, vy: 0, sz: sz, halo: sz * 2.2,
           ph: Math.random() * TAU, tw: Math.random() * TAU
         });
-        bodyBands[bodyBand[pi]].push(pi);
+        auraBands[band].push(i);
       }
 
-      /* --- Farbbänder: acht horizontale Zonen pro Form ------------------ */
+      /* --- Farbbänder: acht Zonen pro Form ------------------------------ */
       bandCosmic = []; bandBlue = []; bandColors = [];
       for (var cb = 0; cb < 8; cb++) {
         bandCosmic.push(color.ramp(color.COSMIC, (cb + 0.5) / 8));
         /* Ziel am Seitenende: durchgehend #309EFF, nur in der Helligkeit
-           gestaffelt — sonst wirkte das Gitternetz unten flach statt räumlich. */
+           gestaffelt — sonst wirkte das Netz unten flach statt räumlich. */
         bandBlue.push({ h: color.BLAU.h, s: 100, l: 50 + (cb / 7) * 18 });
         bandColors.push('');
       }
-      sphereBands = [[], [], [], [], [], [], [], []];
-      gridBands = [[], [], [], [], [], [], [], []];
-      for (var si2 = 0; si2 < N; si2++) {
-        var sb = ((1 - sphere[si2][1]) * 0.5 * 8) | 0;
-        sphereBands[sb < 0 ? 0 : (sb > 7 ? 7 : sb)].push(si2);
-        var gb = (((grid[si2][1] - gy0) / Gh) * 8) | 0;
-        gridBands[gb < 0 ? 0 : (gb > 7 ? 7 : gb)].push(si2);
+      torusBands = [[], [], [], [], [], [], [], []];
+      welleBands = [[], [], [], [], [], [], [], []];
+      for (i = 0; i < N; i++) {
+        /* Torus: nach der Lage auf der Röhre, ergibt Ringe quer zur Masche */
+        var tb = Math.min(7, Math.max(0, ((1 - Math.sin(parts[i].tv)) * 0.5 * 8) | 0));
+        torusBands[tb].push(i);
+        var wb = Math.min(7, Math.max(0, ((parts[i].wy / H) * 8) | 0));
+        welleBands[wb].push(i);
       }
 
       /* --- Linien ------------------------------------------------------- */
-      gridLinks = [];
-      for (var g = 0; g < N; g++) {
-        if (g % gridCols < gridCols - 1 && g + 1 < N) gridLinks.push([g, g + 1]);
-        if (g + gridCols < N) gridLinks.push([g, g + gridCols]);
+      /* Torus: geschlossene Masche in beide Umlaufrichtungen */
+      torusLinks = [];
+      for (i = 0; i < N; i++) {
+        var c = i % nu, r = Math.floor(i / nu);
+        var nachbarU = (c === nu - 1) ? i - nu + 1 : i + 1;   // Ring schließen
+        if (nachbarU >= 0 && nachbarU < N) torusLinks.push([i, nachbarU]);
+        var nachbarV = i + nu;
+        if (nachbarV < N) torusLinks.push([i, nachbarV]);
+        else if (r === nv - 1 && c < N) torusLinks.push([i, c]);              // Röhre schließen
       }
+      torusMaxLen2 = Math.pow(torusR * 0.55, 2);
 
-      /* Stein: die sechs nächsten Nachbarn in 3D, einmal vorberechnet */
-      stoneLinks = [];
-      var seen = {}, thr = 2.0 * Math.sqrt(4 / N), thr2 = thr * thr;
-      for (var a = 0; a < N; a++) {
-        var pa = sphere[a], cand = [];
-        for (var b = 0; b < N; b++) {
-          if (b === a) continue;
-          var pb = sphere[b];
-          var dx = pa[0] - pb[0], dy = pa[1] - pb[1], dz = pa[2] - pb[2];
-          var d2 = dx * dx + dy * dy + dz * dz;
-          if (d2 < thr2) cand.push([d2, b]);
-        }
-        cand.sort(function (m, n) { return m[0] - n[0]; });
-        var kk = Math.min(6, cand.length);
-        for (var ci = 0; ci < kk; ci++) {
-          var nb = cand[ci][1];
-          var key = a < nb ? (a * 100003 + nb) : (nb * 100003 + a);
-          if (!seen[key]) { seen[key] = 1; stoneLinks.push([a, nb]); }
+      /* Wellenfeld: rechts, unten-links, unten-rechts = Dreiecksmaschen */
+      welleLinks = [];
+      for (i = 0; i < N; i++) {
+        var wr = Math.floor(i / cols), wc = i % cols;
+        var gerade = (wr & 1) === 0;
+        if (wc + 1 < cols && i + 1 < N) welleLinks.push([i, i + 1]);
+        if (wr + 1 < rows) {
+          var a = gerade ? (wc - 1) : wc;
+          var b = gerade ? wc : (wc + 1);
+          if (a >= 0 && a < cols && (wr + 1) * cols + a < N) welleLinks.push([i, (wr + 1) * cols + a]);
+          if (b >= 0 && b < cols && (wr + 1) * cols + b < N) welleLinks.push([i, (wr + 1) * cols + b]);
         }
       }
+      /* Reserve für die Dehnung durch die Welle, sonst reißen die Maschen auf */
+      welleMaxLen2 = Math.pow(Math.max(stepX, stepY) + welleAmp * 2.4, 2);
 
       builtW = W; builtH = H;
     }
@@ -334,9 +300,9 @@
       var p = progress;
       var n = parts.length, i;
 
-      /* Das Feld läuft mit der Seite ins Blau, damit Gitternetz und
+      /* Das Feld läuft mit der Seite ins Blau, damit Netz und
          Bedienelemente unten dieselbe Farbe sprechen. Der Übergang liegt
-         hinter dem Stein, der so seine magentafarbene Phase behält. */
+         hinter dem Torus, der so seine Magenta-Phase behält. */
       var blueMix = smoothstep((p - 0.55) / 0.35);
       for (i = 0; i < 8; i++) {
         bandColors[i] = color.css(color.mix(bandCosmic[i], bandBlue[i], blueMix));
@@ -349,77 +315,110 @@
       var keyA = ka.k, keyB = kb.k;
       var mix = smoothstep((p - ka.p) / (kb.p - ka.p));
 
-      var dnaP   = presence(p, -1,   0,    0.13, 0.22);
-      var bodyP  = presence(p, 0.22, 0.30, 0.42, 0.50);
-      var stoneP = presence(p, 0.50, 0.59, 0.69, 0.78);
-      var gridP  = presence(p, 0.78, 0.87, 1.02, 1.03);
-      var maxP = Math.max(dnaP, bodyP, stoneP, gridP);
+      var sogP   = presence(p, -1,   0,    0.13, 0.22);
+      var auraP  = presence(p, 0.22, 0.30, 0.42, 0.50);
+      var torusP = presence(p, 0.50, 0.59, 0.69, 0.78);
+      var welleP = presence(p, 0.78, 0.87, 1.02, 1.03);
+      var maxP = Math.max(sogP, auraP, torusP, welleP);
       var alpha = 0.18 + 0.46 * maxP;
 
       var breathe = !reduce && maxP > 0.5;
       var breathAmp = scale * 0.0035 * maxP;
       var t = performance.now() * 0.001;
 
-      /* Sphäre: Rotation, Neigung, Atmung, Perspektive */
-      var sphereOn = p > 0.50 && p < 0.785;
-      var dnaOn = p < 0.225;
-      var dnaRot = t * 0.30;
-      var dnaTopY = oy + scale * 0.14, dnaSpan = scale * 0.70;
-      var dnaAmp = scale * 0.158, dnaTurns = 1.9;
-      var ca = Math.cos(t * 0.16), sa = Math.sin(t * 0.16);
-      var ct = Math.cos(-0.18), st = Math.sin(-0.18);
-      var sBreath = 1 + 0.02 * Math.sin(t * 0.6), focal = 3.4;
-      var sCx = W * 0.5, sCy = oy + scale * 0.50, sR = scale * 0.27;
+      /* Welche Formen müssen dieses Bild überhaupt gerechnet werden?
+         Die Ränder überlappen, damit an den Übergängen beide Ziele da sind. */
+      var sogOn   = p < 0.235;
+      var auraOn  = p > 0.215 && p < 0.515;
+      var torusOn = p > 0.495 && p < 0.795;
+      var welleOn = p > 0.775;
+
+      /* Sog: geneigte Scheibe, Arme winden sich leicht gegeneinander */
+      var sogTilt = -0.46, sogCT = Math.cos(sogTilt), sogST = Math.sin(sogTilt);
+      var sogSpin = t * 0.26, sogShear = 0.16 * Math.sin(t * 0.45);
+      /* Aura: langsame Eigendrehung, kaum Neigung */
+      var aRot = t * 0.13, aCA = Math.cos(aRot), aSA = Math.sin(aRot);
+      var aTilt = -0.10, aCT = Math.cos(aTilt), aST = Math.sin(aTilt);
+      var aBreath = 1 + 0.022 * Math.sin(t * 0.55);
+      /* Torus: Drehung um die Hochachse plus feste Neigung */
+      var tRot = t * 0.17, tCA = Math.cos(tRot), tSA = Math.sin(tRot);
+      var tTilt = -0.52, tCT = Math.cos(tTilt), tST = Math.sin(tTilt);
+      var tWob = t * 0.85;
+      var focal = 3.4;
+      /* Wellenfeld: Ringwellen laufen nach außen */
+      var wPhase = t * 1.5;
 
       for (i = 0; i < n; i++) {
         var q = parts[i];
-        var ax, ay, bx, by, sxS = 0, syS = 0, dxS = 0, dyS = 0;
+        var ax, ay, bx, by;
+        var sgx = 0, sgy = 0, aux = 0, auy = 0, tox = 0, toy = 0, wex = 0, wey = 0;
 
-        if (sphereOn) {
-          var SX = q.sphere[0], SY = q.sphere[1], SZ = q.sphere[2];
-          /* weiche Rausch-Deformation, damit die Kugel wie ein Stein atmet */
-          var noise = Math.sin(SX * 2.7 + t * 0.9) * 0.5 +
-                      Math.sin(SY * 3.1 - t * 0.7) * 0.3 +
-                      Math.sin(SZ * 2.3 + t * 1.1) * 0.4 +
-                      Math.sin((SX + SY + SZ) * 1.7 + t) * 0.3;
-          var rr = (1 + 0.075 * noise) * sBreath;
-          var X = SX * rr, Y = SY * rr, Z = SZ * rr;
-          var X1 = X * ca + Z * sa, Z1 = -X * sa + Z * ca;   // Drehung um Y
-          var Y2 = Y * ct - Z1 * st, Z2 = Y * st + Z1 * ct;  // Neigung
-          var persp = focal / (focal - Z2);
-          sxS = sCx + X1 * sR * persp;
-          syS = sCy - Y2 * sR * persp;
-          q.dmul = 1 + (0.45 + 1.35 * (Z2 + 1) * 0.5 - 1) * stoneP;
-        } else {
+        if (sogOn) {
+          /* Der Faktor vor sogR bestimmt die Windung: knapp 0,7 Umdrehungen
+             lassen die Arme als Arme lesen, mehr wird zur Schnecke. */
+          var sa = q.sogA + q.sogR * 4.4 + sogSpin + sogShear * (1 - q.sogR);
+          var srad = q.sogR * sogAmp;
+          var SX = Math.cos(sa) * srad, SZ = Math.sin(sa) * srad, SY = q.sogY;
+          var sy2 = SY * sogCT - SZ * sogST;
+          var sz2 = SY * sogST + SZ * sogCT;
+          var sp = focal / (focal - sz2 / sogAmp);
+          sgx = ox + SX * sp;
+          sgy = sogCy + sy2 * sp;
+          q.depth = sz2 / sogAmp;
+        }
+
+        if (auraOn) {
+          var AX = q.aur[0] * auraRx * aBreath;
+          var AY = q.aur[1] * auraRy * aBreath;
+          var AZ = q.aur[2] * auraRx * aBreath;
+          var ax1 = AX * aCA + AZ * aSA, az1 = -AX * aSA + AZ * aCA;
+          var ay2 = AY * aCT - az1 * aST, az2 = AY * aST + az1 * aCT;
+          var apr = focal / (focal - az2 / auraRy);
+          aux = ox + ax1 * apr;
+          auy = auraCy - ay2 * apr;
+        }
+
+        if (torusOn) {
+          var cu = Math.cos(q.tu), su = Math.sin(q.tu);
+          var cv = Math.cos(q.tv), sv = Math.sin(q.tv);
+          /* Die Röhre atmet leicht. Ohne das Wabern sieht der Torus aus wie
+             ein Drahtmodell und nicht wie ein Feld. */
+          var tube = torusTube * (1 + 0.075 * Math.sin(q.tu * 3 + tWob) * Math.sin(q.tv * 2 - tWob * 0.8));
+          var ring = 1 + tube * cv;
+          var TX = ring * cu, TY = tube * sv, TZ = ring * su;
+          var tx1 = TX * tCA + TZ * tSA, tz1 = -TX * tSA + TZ * tCA;
+          var ty2 = TY * tCT - tz1 * tST, tz2 = TY * tST + tz1 * tCT;
+          var tpr = focal / (focal - tz2);
+          tox = ox + tx1 * torusR * tpr;
+          toy = torusCy - ty2 * torusR * tpr;
+          q.dmul = 1 + (0.45 + 1.35 * (tz2 + 1) * 0.5 - 1) * torusP;
+        } else if (!welleOn) {
           q.dmul = 1;
         }
 
-        if (dnaOn) {
-          if (q.dnaRole === 2) {                       // Sprosse quer zur Helix
-            var ar = q.dnaT * dnaTurns * TAU + dnaRot;
-            var xA = ox + dnaAmp * Math.cos(ar), xB = ox - dnaAmp * Math.cos(ar);
-            dxS = xA + (xB - xA) * q.dnaU + q.dnaOX;
-            dyS = dnaTopY + q.dnaT * dnaSpan + q.dnaOY;
-            q.depth = Math.sin(ar) * (1 - 2 * q.dnaU);
-          } else {
-            var ang = q.dnaT * dnaTurns * TAU + q.dnaPhase + dnaRot;
-            var rad = dnaAmp * (1 + q.dnaJitter);
-            dxS = ox + rad * Math.cos(ang) + q.dnaOX;
-            dyS = dnaTopY + q.dnaT * dnaSpan + q.dnaOY;
-            q.depth = Math.sin(ang);
-          }
+        if (welleOn) {
+          /* Ringwelle: die Ruhelage wird radial verschoben, weiter außen
+             flacher — so läuft die Welle sichtbar durch das Netz. */
+          var h = Math.sin(q.wd * welleK - wPhase) * welleAmp / (1 + q.wd / (scale * 2.6));
+          wex = q.wx + q.wnx * h;
+          wey = q.wy + q.wny * h;
+          q.dmul = 0.62 + 0.85 * (0.5 + 0.5 * (h / welleAmp));
         }
 
-        if (keyA === 'stone') { ax = sxS; ay = syS; }
-        else if (keyA === 'dna') { ax = dxS; ay = dyS; }
+        if (keyA === 'sog') { ax = sgx; ay = sgy; }
+        else if (keyA === 'aura') { ax = aux; ay = auy; }
+        else if (keyA === 'torus') { ax = tox; ay = toy; }
+        else if (keyA === 'welle') { ax = wex; ay = wey; }
         else { var A = q[keyA]; ax = A[0]; ay = A[1]; }
 
-        if (keyB === 'stone') { bx = sxS; by = syS; }
-        else if (keyB === 'dna') { bx = dxS; by = dyS; }
+        if (keyB === 'sog') { bx = sgx; by = sgy; }
+        else if (keyB === 'aura') { bx = aux; by = auy; }
+        else if (keyB === 'torus') { bx = tox; by = toy; }
+        else if (keyB === 'welle') { bx = wex; by = wey; }
         else { var B = q[keyB]; bx = B[0]; by = B[1]; }
 
         var tx = ax + (bx - ax) * mix, ty = ay + (by - ay) * mix;
-        if (breathe && !(keyA === 'stone' && keyB === 'stone')) {
+        if (breathe && !(keyA === 'torus' && keyB === 'torus')) {
           tx += Math.sin(t * 0.6 + q.ph) * breathAmp;
           ty += Math.cos(t * 0.5 + q.ph) * breathAmp;
         }
@@ -433,9 +432,9 @@
           if (ptr.on) {
             var rx = q.x - ptr.x, ry = q.y - ptr.y, d2p = rx * rx + ry * ry;
             if (d2p < pointerR2) {
-              var d = Math.sqrt(d2p) || 1, f = 1 - d / pointerR;
-              q.vx += (rx / d) * f * 1.3;
-              q.vy += (ry / d) * f * 1.3;
+              var dd = Math.sqrt(d2p) || 1, f = 1 - dd / pointerR;
+              q.vx += (rx / dd) * f * 1.3;
+              q.vy += (ry / dd) * f * 1.3;
             }
           }
           q.x += q.vx; q.y += q.vy;
@@ -446,29 +445,29 @@
          Das erzeugt den Glut-Effekt ganz ohne Shader oder Blur.          */
       ctx.globalCompositeOperation = 'lighter';
 
-      var dnaDom = dnaP >= bodyP && dnaP >= stoneP && dnaP >= gridP && dnaP > 0.04;
-      var bodyDom = !dnaDom && bodyP >= stoneP && bodyP >= gridP && bodyP > 0.04;
+      var sogDom = sogP >= auraP && sogP >= torusP && sogP >= welleP && sogP > 0.04;
+      var auraDom = !sogDom && auraP >= torusP && auraP >= welleP && auraP > 0.04;
 
-      if (dnaDom) {
-        drawDNA(n, alpha);
-      } else if (bodyDom) {
-        drawBody(bodyP, alpha);
+      if (sogDom) {
+        drawSog(n, alpha, sogP);
+      } else if (auraDom) {
+        drawAura(auraP, alpha);
       } else {
-        drawLattice(stoneP, gridP, alpha);
+        drawNetz(torusP, welleP, alpha);
       }
 
-      /* Funkeln — einzelne Knoten pulsieren auf, am stärksten im Gitter */
-      if (!bodyDom && !dnaDom && maxP > 0.3) {
+      /* Funkeln — einzelne Knoten pulsieren auf, am stärksten im Netz */
+      if (!auraDom && !sogDom && maxP > 0.3) {
         ctx.fillStyle = 'hsl(208,90%,76%)';
-        var strength = 0.35 + 0.85 * gridP;
+        var strength = 0.35 + 0.85 * welleP;
         ctx.globalAlpha = Math.min(0.8, 0.5 * alpha);
         ctx.beginPath();
         for (i = 0; i < n; i++) {
           var w = parts[i], s = Math.sin(t * 1.7 + w.tw);
           if (s > 0) {
-            var r = w.sz * (0.35 + 2.1 * s * strength);
-            ctx.moveTo(w.x + r, w.y);
-            ctx.arc(w.x, w.y, r, 0, TAU);
+            var r2 = w.sz * (0.35 + 2.1 * s * strength);
+            ctx.moveTo(w.x + r2, w.y);
+            ctx.arc(w.x, w.y, r2, 0, TAU);
           }
         }
         ctx.fill();
@@ -478,10 +477,18 @@
       ctx.globalCompositeOperation = 'source-over';
     }
 
-    /* --- DNA: rotierende Plasma-Doppelhelix in vier Tiefenschichten ----- */
-    /* Vier Tiefenschichten, alle aus dem Blau — hinten dunkel, vorn fast weiß */
-    var DNA_COLORS = ['hsl(208,88%,38%)', 'hsl(208,100%,59%)', 'hsl(206,100%,76%)', 'hsl(204,92%,91%)'];
-    function drawDNA(n, alpha) {
+    /* --- Sog: Spiralscheibe in vier Tiefenschichten -------------------- */
+    var SOG_COLORS = ['hsl(208,88%,38%)', 'hsl(208,100%,59%)', 'hsl(206,100%,76%)', 'hsl(204,92%,91%)'];
+    function drawSog(n, alpha, sogP) {
+      /* Kern: der helle Punkt, in den die Arme laufen */
+      var kern = ctx.createRadialGradient(ox, sogCy, 0, ox, sogCy, sogAmp * 0.5);
+      kern.addColorStop(0, 'rgba(255,145,48,' + (0.16 * sogP * hell).toFixed(3) + ')');
+      kern.addColorStop(0.45, 'rgba(120,120,190,' + (0.05 * sogP).toFixed(3) + ')');
+      kern.addColorStop(1, 'rgba(0,0,0,0)');
+      ctx.fillStyle = kern;
+      ctx.globalAlpha = 1;
+      ctx.fillRect(0, 0, W, H);
+
       var layers = [[], [], [], []], i;
       for (i = 0; i < n; i++) {
         var d = parts[i].depth;
@@ -489,17 +496,22 @@
       }
       for (var li = 0; li < 4; li++) {
         var arr = layers[li], front = (li + 0.5) / 4;
-        ctx.fillStyle = DNA_COLORS[li];
+        ctx.fillStyle = SOG_COLORS[li];
 
-        ctx.globalAlpha = Math.min(0.5, (0.032 + 0.038 * front) * alpha);
+        /* Höfe nur auf den größeren Punkten. Die Scheibe deckt eine viel
+           größere Fläche ab als eine Helix, und gefüllte Kreise kosten nach
+           Pixelfläche — flächendeckende Höfe wären hier vergeudet. */
+        ctx.globalAlpha = Math.min(0.5, (0.048 + 0.052 * front) * alpha * hell);
         ctx.beginPath();
         for (i = 0; i < arr.length; i++) {
-          var h = parts[arr[i]], hr = h.sz * (3.0 + 3.4 * front);
+          var h = parts[arr[i]];
+          if (h.sz < 1.2) continue;
+          var hr = h.sz * (2.6 + 3.0 * front);
           ctx.moveTo(h.x + hr, h.y); ctx.arc(h.x, h.y, hr, 0, TAU);
         }
         ctx.fill();
 
-        ctx.globalAlpha = Math.min(1, (0.5 + 0.55 * front) * alpha);
+        ctx.globalAlpha = Math.min(1, (0.66 + 0.62 * front) * alpha * hell);
         ctx.beginPath();
         for (i = 0; i < arr.length; i++) {
           var c = parts[arr[i]], cr = Math.max(0.7, c.sz * (0.95 + 0.45 * front));
@@ -509,10 +521,10 @@
       }
     }
 
-    /* --- Körper: Sternenfeld in Menschform, Rot oben / Blau unten ------- */
-    function drawBody(bodyP, alpha) {
-      var a = Math.min(1, bodyP);
-      var yTop = oy + scale * 0.26, yBot = oy + scale * 0.74, r = scale * 0.42;
+    /* --- Aura: geschachtelte Schalen, Orange oben / Blau unten --------- */
+    function drawAura(auraP, alpha) {
+      var a = Math.min(1, auraP);
+      var yTop = auraCy - auraRy * 0.55, yBot = auraCy + auraRy * 0.55, r = auraRy * 1.5;
 
       var gTop = ctx.createRadialGradient(ox, yTop, 0, ox, yTop, r);
       gTop.addColorStop(0, 'rgba(255,145,48,' + (0.09 * a).toFixed(3) + ')');
@@ -526,30 +538,45 @@
 
       var b, k;
       for (b = 0; b < 8; b++) {
-        var idx = bodyBands[b];
+        var idx = auraBands[b];
         if (!idx.length) continue;
         ctx.fillStyle = bandColors[b];
 
         ctx.globalAlpha = 0.05 * alpha;
         ctx.beginPath();
         for (k = 0; k < idx.length; k++) {
-          var h = parts[idx[k]], hr = h.sz * 1.9;
+          var h = parts[idx[k]], hr = h.sz * 1.9 * h.aSch;
           ctx.moveTo(h.x + hr, h.y); ctx.arc(h.x, h.y, hr, 0, TAU);
+        }
+        ctx.fill();
+
+        /* Zwei Durchgänge: erst die inneren Schalen matt, dann die äußere
+           voll. Das trennt sie sichtbar, statt alles zu einem Klumpen zu
+           addieren. */
+        ctx.globalAlpha = Math.min(1, 0.34 * alpha);
+        ctx.beginPath();
+        for (k = 0; k < idx.length; k++) {
+          var ci = parts[idx[k]];
+          if (ci.aSch > 0.85) continue;
+          var cir = Math.max(0.7, ci.sz * 0.72);
+          ctx.moveTo(ci.x + cir, ci.y); ctx.arc(ci.x, ci.y, cir, 0, TAU);
         }
         ctx.fill();
 
         ctx.globalAlpha = Math.min(1, 0.97 * alpha);
         ctx.beginPath();
         for (k = 0; k < idx.length; k++) {
-          var c = parts[idx[k]], cr = c.sz > 0.8 ? c.sz : 0.8;
+          var c = parts[idx[k]];
+          if (c.aSch <= 0.85) continue;
+          var cr = c.sz > 0.85 ? c.sz : 0.85;
           ctx.moveTo(c.x + cr, c.y); ctx.arc(c.x, c.y, cr, 0, TAU);
         }
         ctx.fill();
       }
 
-      /* Sterne: die größeren Innenpunkte bekommen einen weiten Hof */
+      /* Sterne: die größeren Punkte bekommen einen weiten Hof */
       for (b = 0; b < 8; b++) {
-        var ids = bodyBands[b];
+        var ids = auraBands[b];
         if (!ids.length) continue;
         ctx.fillStyle = bandColors[b];
         ctx.globalAlpha = Math.min(0.42, 0.10 * alpha + 0.05);
@@ -564,13 +591,16 @@
       }
     }
 
-    /* --- Sphäre und Gitternetz: verbundene Knoten ----------------------- */
-    function drawLattice(stoneP, gridP, alpha) {
-      var isSphere = stoneP >= gridP;
-      var links = isSphere ? stoneLinks : gridLinks;
-      var lp = isSphere ? stoneP : gridP;
-      var strength = isSphere ? 0.92 : 0.5;
-      var bands = isSphere ? sphereBands : gridBands;
+    /* --- Torus und Wellenfeld: verbundene Knoten ----------------------- */
+    function drawNetz(torusP, welleP, alpha) {
+      var istTorus = torusP >= welleP;
+      var links = istTorus ? torusLinks : welleLinks;
+      var lp = istTorus ? torusP : welleP;
+      /* Das Wellenfeld liegt unter Fließtext und Fußzeile — die Fäden dort
+         bleiben absichtlich zurückhaltend. */
+      var strength = istTorus ? 0.70 : 0.34;
+      var bands = istTorus ? torusBands : welleBands;
+      var maxLen2 = istTorus ? torusMaxLen2 : welleMaxLen2;
 
       var lineAlpha = lp * strength * alpha;
       if (links && lineAlpha > 0.006) {
@@ -580,7 +610,6 @@
         ctx.beginPath();
         /* Zu lange Linien überspringen — sonst zieht der Morph Striche
            quer über den Schirm, statt das Netz zusammenzuweben.          */
-        var maxLen2 = (scale * 0.10) * (scale * 0.10);
         for (var k = 0; k < links.length; k++) {
           var u = parts[links[k][0]], v = parts[links[k][1]];
           var dx = u.x - v.x, dy = u.y - v.y;
@@ -590,7 +619,7 @@
         ctx.stroke();
       }
 
-      var glow = Math.max(gridP, stoneP * 0.85), b, i;
+      var glow = Math.max(welleP, torusP * 0.85), b, i;
       for (b = 0; b < 8; b++) {
         var idx = bands[b];
         if (!idx.length) continue;
@@ -666,5 +695,5 @@
     };
   }
 
-  global.EnergyField = { init: init, inBody: inBody };
+  global.EnergyField = { init: init };
 })(window);
