@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- ?v= bei jeder Änderung hochzählen, sonst liefern Browser die alte Datei aus -->
-<link rel="stylesheet" href="css/style.css?v=4">
+<link rel="stylesheet" href="css/style.css?v=5">
 
 <script type="application/ld+json">
 {
@@ -69,7 +69,7 @@
 
 <nav id="nav">
   <a class="brand" href="#top" aria-label="Daniel Kallenbach — Startseite">
-    <img class="vmark" src="assets/logo.png" alt="">
+    <img class="vmark" src="assets/logo.png" alt="" width="288" height="213">
     <span>Daniel&nbsp;Kallenbach</span>
   </a>
   <a class="btn beam" href="#gespraech">Kostenloses Gespräch</a>
@@ -82,8 +82,13 @@
        2000px Breite einsetzen. object-position steuert den Bildausschnitt. -->
   <header class="hero" id="hero">
     <div class="hero-media">
-      <img src="assets/hero.jpg" alt="Bergsee in den Dolomiten, der Gipfel spiegelt sich im stillen Wasser"
-           fetchpriority="high" decoding="async" style="object-position:center 38%">
+      <picture>
+        <source srcset="assets/hero.avif" type="image/avif">
+        <source srcset="assets/hero.webp" type="image/webp">
+        <img src="assets/hero.jpg" alt="Bergsee in den Dolomiten, der Gipfel spiegelt sich im stillen Wasser"
+             width="1024" height="682"
+             fetchpriority="high" decoding="async" style="object-position:center 38%">
+      </picture>
     </div>
     <div class="hero-inner wrap">
       <p class="eyebrow reveal">Bewusstsein · Verantwortung · Wirkung</p>
@@ -129,8 +134,13 @@
       </div>
       <div class="m reveal" style="--d:120ms">
         <figure class="figure tall">
-          <img src="assets/daniel-portraet.jpg" alt="Daniel Kallenbach im Porträt, im Hintergrund Bäume im Abendlicht"
-               loading="eager" decoding="async" style="object-position:center 30%">
+          <picture>
+            <source srcset="assets/daniel-portraet.avif" type="image/avif">
+            <source srcset="assets/daniel-portraet.webp" type="image/webp">
+            <img src="assets/daniel-portraet.jpg" alt="Daniel Kallenbach im Porträt, im Hintergrund Bäume im Abendlicht"
+                 width="789" height="1024"
+                 loading="eager" decoding="async" style="object-position:center 30%">
+          </picture>
           <span class="ring"></span>
           <figcaption class="figcap">Was nach außen wirkt</figcaption>
         </figure>
@@ -186,8 +196,13 @@
       </div>
       <div class="m reveal" style="--d:120ms">
         <figure class="figure tall">
-          <img src="assets/daniel-tor.jpg" alt="Daniel Kallenbach vor einem goldenen Tor in felsiger Landschaft"
-               loading="lazy" decoding="async" style="object-position:center 70%">
+          <picture>
+            <source srcset="assets/daniel-tor.avif" type="image/avif">
+            <source srcset="assets/daniel-tor.webp" type="image/webp">
+            <img src="assets/daniel-tor.jpg" alt="Daniel Kallenbach vor einem goldenen Tor in felsiger Landschaft"
+                 width="576" height="1024"
+                 loading="lazy" decoding="async" style="object-position:center 70%">
+          </picture>
           <span class="ring"></span>
           <figcaption class="figcap">Der Blick durch die Lupe</figcaption>
         </figure>
@@ -295,7 +310,7 @@
                 <!-- Kalender aktivieren: CONFIG.calendly in js/site.js setzen -->
                 <div id="cal-widget" style="min-width:280px">
                   <div class="cal-empty">
-                    <img class="cal-mark" src="assets/logo.png" alt="">
+                    <img class="cal-mark" src="assets/logo.png" alt="" width="288" height="213" loading="lazy">
                     <span>Kalender noch nicht verbunden.<br>Calendly-Link in <b>js/site.js</b> eintragen.</span>
                   </div>
                 </div>
@@ -356,7 +371,7 @@
   <footer>
     <div class="wrap">
       <div class="foot-close reveal">
-        <img class="foot-logo" src="assets/logo.png" alt="">
+        <img class="foot-logo" src="assets/logo.png" alt="" width="288" height="213" loading="lazy">
         <p class="foot-name">Daniel&nbsp;Kallenbach</p>
         <p class="foot-line">Meine Mission ist es, weiterzugeben, was ich auf meinem Weg gelernt habe. Der nächste Schritt ist ein Gespräch.</p>
         <a class="btn btn-lg beam" href="#gespraech">Kostenloses Gespräch sichern <span class="arr">→</span></a>
@@ -371,8 +386,8 @@
 
 </main>
 
-<script src="js/color.js?v=4"></script>
-<script src="js/energy-field.js?v=4"></script>
-<script src="js/site.js?v=4"></script>
+<script src="js/color.js?v=5"></script>
+<script src="js/energy-field.js?v=5"></script>
+<script src="js/site.js?v=5"></script>
 </body>
 </html>

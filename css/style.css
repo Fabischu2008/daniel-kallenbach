@@ -167,6 +167,10 @@ p{margin:0 0 1.1em}
 .hero{position:relative; overflow:hidden; min-height:100svh;
   display:flex; align-items:flex-end;
   padding-block:clamp(150px, 13vw, 210px) clamp(56px,9vh,108px)}
+/* picture reicht die Größenangaben durch, damit width/height der Bilder
+   weiterhin gegen .hero-media beziehungsweise .figure aufgelöst werden. */
+picture{display:contents}
+
 .hero-media{position:absolute; inset:0; z-index:0}
 .hero-media img{width:100%; height:100%; object-fit:cover; object-position:center 28%; display:block}
 .hero-media::after{content:""; position:absolute; inset:0;
