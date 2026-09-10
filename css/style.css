@@ -408,6 +408,27 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
 ::selection{background:hsl(var(--eh) var(--es) var(--el) / .32); color:#fff}
 
 @media(max-width:520px){
-  .brand{font-size:.66rem; letter-spacing:.26em}
+  /* Schriftzug und Button stehen beide auf `white-space:nowrap` und können
+     nicht schrumpfen. Ohne diese Verkleinerungen stoßen sie auf schmalen
+     Geräten ohne einen Pixel Abstand aneinander. Das `gap` ist die
+     Untergrenze, die verhindert, dass sie sich je wieder berühren. */
+  nav{gap:16px}
+  .brand{font-size:.62rem; letter-spacing:.2em; gap:10px}
+  nav .btn{padding:.78em 1.15em; font-size:.7rem}
   .hero{padding-top:104px}
+}
+
+@media(max-width:400px){
+  /* Der Rand der Kopfzeile darf schmaler sein als der des Fließtexts,
+     sonst schiebt der Button ueber den rechten Bildschirmrand hinaus. */
+  nav{padding-inline:15px; gap:14px}
+  .brand{gap:9px}
+  nav .btn{padding:.75em .95em; font-size:.66rem}
+}
+
+@media(max-width:359px){
+  /* Darunter passen Schriftzug und Button nicht mehr nebeneinander.
+     Der Button traegt die Handlungsaufforderung, also weicht der
+     Schriftzug — das Logo bleibt als Marke und als Weg zurueck nach oben. */
+  .brand span{display:none}
 }
