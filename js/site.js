@@ -27,7 +27,7 @@
     root.style.setProperty('--el', c.l.toFixed(1) + '%');
   }
 
-  /* ---- Energiefeld — nur auf der Startseite, dort liegt das Canvas ------ */
+  /* ---- Energiefeld: Startseite volle Reise, Kontakt nur das Ende -------- */
   var canvas = document.getElementById('energyField');
   var field = (canvas && window.EnergyField) ? window.EnergyField.init(canvas, { reduce: reduce }) : null;
 
@@ -35,6 +35,7 @@
   var nav = document.getElementById('nav');
   var bar = document.getElementById('progress');
   var hero = document.getElementById('hero');
+  var fieldEnd = !hero && !!canvas;
   var pending = false;
 
   /* Ruhige Bezugshöhe: innerHeight wächst und schrumpft auf dem Handy mit der
@@ -48,17 +49,23 @@
     var max = document.documentElement.scrollHeight - viewH;
     var p = max > 0 ? Math.max(0, Math.min(1, window.scrollY / max)) : 0;
 
-    /* Das Energiefeld startet erst nach dem Hero und bekommt dann den
-       gesamten Rest der Seite als Bühne.                                 */
-    var heroH = hero ? hero.offsetHeight : window.innerHeight;
-    var fieldMax = max - heroH;
-    var fieldP = fieldMax > 0
-      ? Math.max(0, Math.min(1, (window.scrollY - heroH) / fieldMax))
-      : 0;
-    if (field) field.setProgress(fieldP);
+    if (field && fieldEnd) {
+      /* Gleicher Zustand wie ganz unten auf der Startseite: Wellenfeld. */
+      field.setProgress(max > 0 ? 0.86 + p * 0.14 : 0.94);
+    } else if (field) {
+      /* Das Energiefeld startet erst nach dem Hero und bekommt dann den
+         gesamten Rest der Seite als Bühne.                               */
+      var heroH = hero ? hero.offsetHeight : viewH;
+      var fieldMax = max - heroH;
+      var fieldP = fieldMax > 0
+        ? Math.max(0, Math.min(1, (window.scrollY - heroH) / fieldMax))
+        : 0;
+      field.setProgress(fieldP);
+    }
 
-    if (canvas) {
-      var fade = (window.scrollY - heroH * 0.72) / (heroH * 0.28);
+    if (canvas && !fieldEnd) {
+      var fadeH = hero ? hero.offsetHeight : viewH;
+      var fade = (window.scrollY - fadeH * 0.72) / (fadeH * 0.28);
       canvas.style.opacity = Math.max(0, Math.min(1, fade)).toFixed(3);
     }
 

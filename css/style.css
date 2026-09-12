@@ -54,6 +54,8 @@ body{
 #energyField{position:fixed; top:0; left:0; width:100%;
   height:100vh; height:100lvh;
   z-index:1; pointer-events:none; display:block; opacity:0}
+/* Kontakt und ähnliche Seiten starten direkt im Endzustand der Reise. */
+body.field-end #energyField{opacity:1}
 #vignette{position:fixed; inset:0; z-index:2; pointer-events:none;
   background:
     radial-gradient(125% 90% at 50% 32%, transparent 46%, rgba(5,5,7,.5) 82%, rgba(3,3,5,.93) 100%),
