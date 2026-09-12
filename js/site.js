@@ -27,9 +27,9 @@
     root.style.setProperty('--el', c.l.toFixed(1) + '%');
   }
 
-  /* ---- Energiefeld ----------------------------------------------------- */
+  /* ---- Energiefeld — nur auf der Startseite, dort liegt das Canvas ------ */
   var canvas = document.getElementById('energyField');
-  var field = window.EnergyField.init(canvas, { reduce: reduce });
+  var field = (canvas && window.EnergyField) ? window.EnergyField.init(canvas, { reduce: reduce }) : null;
 
   /* ---- Scroll ---------------------------------------------------------- */
   var nav = document.getElementById('nav');
@@ -226,6 +226,49 @@
     el.textContent = CONFIG.email;
     if (el.tagName === 'A') el.href = 'mailto:' + CONFIG.email;
   });
+
+  /* ---- Navigation: Mobilmenü und Themen-Klappe ------------------------- */
+  (function () {
+    var toggle = document.getElementById('navToggle');
+    var links = document.getElementById('navLinks');
+    var drop = document.querySelector('.nav-drop');
+    var dropBtn = document.querySelector('.nav-drop-btn');
+
+    function setDrop(open) {
+      if (!drop || !dropBtn) return;
+      drop.classList.toggle('is-open', open);
+      dropBtn.setAttribute('aria-expanded', String(open));
+    }
+
+    if (toggle && links) {
+      toggle.addEventListener('click', function () {
+        var open = toggle.getAttribute('aria-expanded') !== 'true';
+        toggle.setAttribute('aria-expanded', String(open));
+        document.body.classList.toggle('nav-open', open);
+        if (!open) setDrop(false);
+      });
+      links.querySelectorAll('a').forEach(function (a) {
+        a.addEventListener('click', function () {
+          toggle.setAttribute('aria-expanded', 'false');
+          document.body.classList.remove('nav-open');
+        });
+      });
+    }
+
+    if (drop && dropBtn) {
+      dropBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        setDrop(!drop.classList.contains('is-open'));
+      });
+      document.addEventListener('click', function (e) {
+        if (!drop.contains(e.target)) setDrop(false);
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') setDrop(false);
+      });
+    }
+  })();
 
   onScroll();
 })();

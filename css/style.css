@@ -71,11 +71,62 @@ body{
 /* ---------- Navigation (ein Ziel) ---------- */
 nav{position:fixed; top:0; left:0; right:0; z-index:70;
   display:flex; align-items:center; justify-content:space-between;
+  gap:18px;
   padding:clamp(16px, 1.7vw, 27px) var(--pad);
   transition:background .45s var(--ease), backdrop-filter .45s var(--ease),
              border-color .45s var(--ease), padding .45s var(--ease);
   border-bottom:1px solid transparent;
 }
+.nav-end{display:flex; align-items:center; gap:clamp(14px, 1.6vw, 28px); min-width:0}
+.nav-links{display:flex; align-items:center; gap:clamp(16px, 1.8vw, 28px)}
+.nav-links > a, .nav-drop-btn{
+  font-family:var(--sans); font-weight:500; font-size:.72rem; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-dim); text-decoration:none;
+  white-space:nowrap; transition:color .3s var(--ease);
+  background:none; border:0; padding:0; cursor:pointer
+}
+.nav-links > a:hover, .nav-links > a.is-on,
+.nav-drop-btn:hover, .nav-drop-btn.is-on, .nav-drop.is-open .nav-drop-btn{color:var(--ink)}
+.nav-drop{position:relative}
+.nav-drop-btn{display:inline-flex; align-items:center; gap:.42em}
+.nav-drop-btn::after{
+  content:""; width:0; height:0;
+  border-left:3.5px solid transparent; border-right:3.5px solid transparent;
+  border-top:4px solid currentColor; opacity:.55;
+  transition:transform .25s var(--ease)
+}
+.nav-drop.is-open .nav-drop-btn::after, .nav-drop:hover .nav-drop-btn::after{transform:rotate(180deg)}
+/* Brücke zwischen Wort und Liste, sonst bricht Hover in der Lücke ab. */
+.nav-drop::after{content:""; position:absolute; left:0; right:0; top:100%; height:16px}
+.nav-drop-list{
+  position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%);
+  min-width:214px; padding:8px; border-radius:14px; z-index:80;
+  background:rgba(10,10,14,.94); border:1px solid var(--line-2);
+  backdrop-filter:blur(16px) saturate(120%); -webkit-backdrop-filter:blur(16px) saturate(120%);
+  display:flex; flex-direction:column; gap:2px;
+  opacity:0; visibility:hidden; pointer-events:none;
+  transition:opacity .2s var(--ease), visibility .2s var(--ease)
+}
+.nav-drop:hover .nav-drop-list, .nav-drop:focus-within .nav-drop-list,
+.nav-drop.is-open .nav-drop-list{opacity:1; visibility:visible; pointer-events:auto}
+.nav-drop-list a{
+  font-family:var(--sans); font-size:.9rem; letter-spacing:.02em; text-transform:none;
+  color:var(--ink-dim); text-decoration:none; padding:.7em .9em; border-radius:9px
+}
+.nav-drop-list a:hover, .nav-drop-list a.is-on{color:var(--ink); background:rgba(255,255,255,.06)}
+.nav-toggle{
+  display:none; width:42px; height:42px; margin:0; padding:0; border:0; background:transparent;
+  cursor:pointer; position:relative; flex:0 0 auto
+}
+.nav-toggle span{
+  position:absolute; left:11px; right:11px; height:1.5px; background:var(--ink);
+  transition:transform .3s var(--ease), top .3s var(--ease), opacity .2s var(--ease)
+}
+.nav-toggle span:first-child{top:16px}
+.nav-toggle span:last-child{top:24px}
+.nav-toggle[aria-expanded="true"] span:first-child{top:20px; transform:rotate(45deg)}
+.nav-toggle[aria-expanded="true"] span:last-child{top:20px; transform:rotate(-45deg)}
+
 nav.scrolled{padding-top:clamp(12px, 1.2vw, 19px); padding-bottom:clamp(12px, 1.2vw, 19px);
   background:rgba(8,8,11,.62); backdrop-filter:blur(16px) saturate(120%);
   -webkit-backdrop-filter:blur(16px) saturate(120%); border-bottom-color:var(--line);
@@ -162,6 +213,7 @@ p{margin:0 0 1.1em}
 .verse .gap{height:1.35em}
 .verse strong{color:var(--ink); font-weight:500}
 .verse .hot{color:var(--energy); font-style:normal; transition:color .6s linear}
+.verse a{color:var(--energy); text-decoration:none; border-bottom:1px solid var(--energy-line)}
 
 /* ---------- Hero ---------- */
 .hero{position:relative; overflow:hidden; min-height:100svh;
@@ -432,3 +484,95 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
      Schriftzug — das Logo bleibt als Marke und als Weg zurueck nach oben. */
   .brand span{display:none}
 }
+
+@media(max-width:860px){
+  .nav-toggle{display:block; z-index:72}
+  .nav-links{
+    position:fixed; inset:0 0 auto 0; top:0; padding:92px var(--pad) 28px; z-index:71;
+    background:rgba(8,8,11,.94); border-bottom:1px solid var(--line);
+    flex-direction:column; align-items:flex-start; gap:18px;
+    transform:translateY(-110%); opacity:0; pointer-events:none;
+    transition:transform .4s var(--ease), opacity .35s var(--ease)
+  }
+  body.nav-open .nav-links{transform:none; opacity:1; pointer-events:auto}
+  body.nav-open{overflow:hidden}
+  .nav-drop{width:100%}
+  .nav-drop::after{display:none}
+  .nav-drop-btn{
+    display:block; margin-top:8px; padding-top:16px; width:100%; text-align:left;
+    border-top:1px solid var(--line); pointer-events:none;
+    font-size:.62rem; letter-spacing:.22em; color:var(--ink-faint)
+  }
+  .nav-drop-btn::after{display:none}
+  .nav-drop-list{
+    position:static; transform:none; min-width:0; padding:0; margin-top:14px;
+    background:transparent; border:0; border-radius:0; gap:18px;
+    opacity:1; visibility:visible; pointer-events:auto;
+    backdrop-filter:none; -webkit-backdrop-filter:none
+  }
+  .nav-drop-list a{
+    font-size:.72rem; letter-spacing:.16em; text-transform:uppercase; padding:0
+  }
+  .nav-drop-list a:hover, .nav-drop-list a.is-on{background:transparent}
+}
+
+/* ---------- Innenseiten ---------- */
+.page-hero{padding-block:clamp(132px, 16vw, 190px) clamp(48px, 8vh, 88px)}
+.page-hero .reveal{opacity:1; transform:none}
+.page-hero h1{max-width:16ch}
+.page-hero .lede{margin-top:1.4rem; max-width:42ch; color:var(--ink-dim)}
+.page-cta{padding-block:clamp(80px, 12vh, 140px)}
+.quote{margin:0; max-width:28ch; font-family:var(--serif); font-weight:500;
+  font-size:clamp(1.55rem, 1rem + 1.8vw, 2.35rem); line-height:1.22; letter-spacing:-.016em}
+.quote cite{display:block; margin-top:1rem; font-family:var(--sans); font-style:normal;
+  font-size:.7rem; letter-spacing:.2em; text-transform:uppercase; color:var(--ink-faint)}
+
+.stimmen{display:grid; grid-template-columns:1fr; gap:1px; margin-top:clamp(36px,5vw,56px);
+  background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden}
+@media(min-width:840px){.stimmen{grid-template-columns:1fr 1fr}}
+.stimme{background:var(--bg); padding:clamp(26px,3vw,36px)}
+.stimme p{font-family:var(--serif); font-size:clamp(1.05rem,.9rem+.4vw,1.2rem);
+  line-height:1.55; color:var(--ink-dim); margin:0 0 1.2em}
+.stimme .who{font-family:var(--sans); font-size:.7rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--ink-faint); margin:0}
+
+.schwer{display:grid; grid-template-columns:1fr; gap:clamp(28px,4vw,48px);
+  margin-top:clamp(40px,5vw,68px)}
+@media(min-width:900px){.schwer{grid-template-columns:1fr 1fr 1fr}}
+.schwer article{border-top:1px solid var(--line); padding-top:1.4rem}
+.schwer h3{font-size:clamp(1.45rem,1rem+1vw,1.9rem); margin-bottom:.7em}
+.schwer ul{margin:0; padding:0; list-style:none}
+.schwer li{font-family:var(--sans); font-size:.98rem; line-height:1.5; color:var(--ink-dim);
+  padding:.42em 0 .42em 1.1em; position:relative}
+.schwer li::before{content:"→"; position:absolute; left:0; color:hsl(var(--eh) var(--es) var(--el) / .9)}
+
+.tips{list-style:none; margin:clamp(28px,4vw,44px) 0 0; padding:0; max-width:68ch}
+.tips li{display:grid; grid-template-columns:auto 1fr; gap:1em; align-items:baseline;
+  padding:1.05em 0; border-bottom:1px solid var(--line); color:var(--ink-dim);
+  font-size:clamp(1.05rem,.9rem+.35vw,1.2rem); line-height:1.5}
+.tips .no{font-family:var(--sans); font-size:.74rem; letter-spacing:.06em;
+  color:hsl(var(--eh) var(--es) var(--el) / .85)}
+
+.ausbildungen{list-style:none; margin:clamp(28px,4vw,48px) 0 0; padding:0; max-width:62ch}
+.ausbildungen li{display:flex; justify-content:space-between; gap:1.4em; flex-wrap:wrap;
+  padding:.95em 0; border-bottom:1px solid var(--line)}
+.ausbildungen b{font-weight:500; color:var(--ink)}
+.ausbildungen span{font-family:var(--sans); font-size:.86rem; color:var(--ink-faint); text-align:right}
+
+.legal-body{font-family:var(--sans); font-size:1rem; line-height:1.8; color:var(--ink-dim); max-width:62ch}
+.legal-body h3{font-size:1.15rem; margin:2.4em 0 .6em; color:var(--ink)}
+.legal-body h4{font-size:1rem; margin:1.8em 0 .4em; color:var(--ink)}
+.legal-body a{color:var(--energy); text-decoration:none; border-bottom:1px solid var(--energy-line)}
+.legal-body ul{margin:.4em 0 1.2em; padding-left:1.2em}
+.legal-nav{display:flex; gap:1.4em; flex-wrap:wrap; margin-top:3em}
+
+.soc{display:flex; gap:18px; justify-content:center; margin:1.6rem 0 0}
+.soc a{font-family:var(--sans); font-size:.7rem; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--ink-faint); text-decoration:none; border-bottom:1px solid transparent}
+.soc a:hover{color:var(--ink); border-color:var(--line-2)}
+
+.foot-links{display:flex; justify-content:center; gap:18px; flex-wrap:wrap;
+  margin:2.2rem 0 0; font-family:var(--sans); font-size:.7rem; letter-spacing:.14em;
+  text-transform:uppercase}
+.foot-links a{color:var(--ink-faint); text-decoration:none}
+.foot-links a:hover{color:var(--ink)}

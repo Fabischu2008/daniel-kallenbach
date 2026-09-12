@@ -6,31 +6,43 @@
 <title>Impressum — Daniel Kallenbach</title>
 <meta name="robots" content="noindex, follow">
 <meta name="theme-color" content="#08080a">
+<link rel="canonical" href="https://daniel-kallenbach.de/impressum.html">
 <link rel="icon" href="assets/mark.png" type="image/png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=8">
-<style>
-  /* Rechtstext liest sich schmaler und ruhiger als die Startseite */
-  .legal-body{font-family:var(--sans); font-size:1rem; line-height:1.8; color:var(--ink-dim); max-width:62ch}
-  .legal-body h3{font-size:1.15rem; margin:2.4em 0 .6em; color:var(--ink)}
-  .legal-body a{color:var(--energy); text-decoration:none; border-bottom:1px solid var(--energy-line)}
-  .legal-body .todo{color:var(--ink-faint)}
-</style>
+<link rel="stylesheet" href="css/style.css?v=11">
 </head>
 <body>
 
 <div id="atmos" aria-hidden="true"></div>
 <div id="vignette" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"></div>
 
-<nav id="nav" class="scrolled">
+<nav id="nav">
   <a class="brand" href="index.html" aria-label="Daniel Kallenbach — Startseite">
     <img class="vmark" src="assets/logo.png" alt="" width="288" height="213">
     <span>Daniel&nbsp;Kallenbach</span>
   </a>
-  <a class="btn beam" href="index.html#gespraech">Kostenloses Gespräch</a>
+  <div class="nav-end">
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Start</a>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Themen</button>
+        <div class="nav-drop-list">
+          <a href="selbstliebe.html">Selbstliebe</a>
+          <a href="achtsamkeit.html">Achtsamkeit</a>
+          <a href="selbstbewusstsein.html">Selbstbewusstsein</a>
+          <a href="meditation.html">Meditation</a>
+        </div>
+      </div>
+      <a href="ueber-mich.html">Über mich</a>
+      <a href="kontakt.html">Kontakt</a>
+    </div>
+    <a class="btn beam" href="index.html#gespraech">Kostenloses Gespräch</a>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span></button>
+  </div>
 </nav>
 
 <main class="shell">
@@ -39,24 +51,19 @@
       <p class="eyebrow">Rechtliches</p>
       <h2>Impressum</h2>
       <div class="legal-body">
-        <p class="todo">Platzhalter — bitte durch die echten Angaben ersetzen.</p>
-
         <h3>Angaben gemäß § 5 DDG</h3>
         <p>
           Daniel Kallenbach<br>
-          [Straße und Hausnummer]<br>
-          [PLZ Ort]<br>
+          Danzinger Str. 43<br>
+          67659 Kaiserslautern<br>
           Deutschland
         </p>
 
         <h3>Kontakt</h3>
         <p>
-          Telefon: [Telefonnummer]<br>
+          Telefon: 0176&nbsp;20774302<br>
           E-Mail: <a href="mailto:" data-mail>kontakt@daniel-kallenbach.de</a>
         </p>
-
-        <h3>Umsatzsteuer-ID</h3>
-        <p>[USt-IdNr. gemäß § 27 a UStG — oder Hinweis auf Kleinunternehmerregelung]</p>
 
         <h3>Verantwortlich für den Inhalt</h3>
         <p>Daniel Kallenbach, Anschrift wie oben.</p>
@@ -70,20 +77,13 @@
         <h3>Hinweis</h3>
         <p>Die Angebote auf dieser Website sind keine Psychotherapie und ersetzen keine medizinische oder psychologische Behandlung.</p>
 
-        <p style="margin-top:3em"><a href="index.html">← Zurück zur Startseite</a></p>
+        <p class="legal-nav"><a href="datenschutz.html">Datenschutzerklärung</a><a href="index.html">← Zur Startseite</a></p>
       </div>
     </div>
   </section>
 </main>
 
-<script src="js/color.js?v=8"></script>
-<script>
-  /* Nur die E-Mail-Platzhalter füllen — kein Energiefeld auf Rechtsseiten. */
-  document.querySelectorAll('[data-mail]').forEach(function (el) {
-    var mail = 'kontakt@daniel-kallenbach.de';
-    el.textContent = mail;
-    if (el.tagName === 'A') el.href = 'mailto:' + mail;
-  });
-</script>
+<script src="js/color.js?v=11"></script>
+<script src="js/site.js?v=11"></script>
 </body>
 </html>

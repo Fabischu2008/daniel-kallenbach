@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- ?v= bei jeder Änderung hochzählen, sonst liefern Browser die alte Datei aus -->
-<link rel="stylesheet" href="css/style.css?v=8">
+<link rel="stylesheet" href="css/style.css?v=11">
 
 <script type="application/ld+json">
 {
@@ -72,7 +72,24 @@
     <img class="vmark" src="assets/logo.png" alt="" width="288" height="213">
     <span>Daniel&nbsp;Kallenbach</span>
   </a>
-  <a class="btn beam" href="#gespraech">Kostenloses Gespräch</a>
+  <div class="nav-end">
+    <div class="nav-links" id="navLinks">
+      <a href="#top" class="is-on" aria-current="page">Start</a>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Themen</button>
+        <div class="nav-drop-list">
+          <a href="selbstliebe.html">Selbstliebe</a>
+          <a href="achtsamkeit.html">Achtsamkeit</a>
+          <a href="selbstbewusstsein.html">Selbstbewusstsein</a>
+          <a href="meditation.html">Meditation</a>
+        </div>
+      </div>
+      <a href="ueber-mich.html">Über mich</a>
+      <a href="kontakt.html">Kontakt</a>
+    </div>
+    <a class="btn beam" href="#gespraech">Kostenloses Gespräch</a>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span></button>
+  </div>
 </nav>
 
 <main class="shell" id="top">
@@ -243,6 +260,80 @@
     </div>
   </section>
 
+  <!-- ================= Schwerpunkte ================= -->
+  <section id="schwerpunkte">
+    <div class="wrap">
+      <p class="eyebrow reveal">Arbeit</p>
+      <h2 class="reveal measure" style="--d:50ms">Womit wir <em>arbeiten.</em></h2>
+      <div class="schwer">
+        <article class="reveal">
+          <h3>Psychologische Beratung</h3>
+          <ul>
+            <li>Wie Gedanken und Unterbewusstsein funktionieren</li>
+            <li>Weshalb du fühlst, was du fühlst</li>
+            <li>Wo deine Themen herkommen</li>
+            <li>Akzeptanz und Annahme deiner Selbst</li>
+            <li>Umgang mit herausfordernden Situationen</li>
+          </ul>
+        </article>
+        <article class="reveal" style="--d:80ms">
+          <h3>Energiearbeit</h3>
+          <ul>
+            <li>Arbeit im Unterbewusstsein</li>
+            <li>Auflösen von Energieblockaden</li>
+            <li>Klärung von Mutter- und Vaterwunden</li>
+            <li>Wirkt direkt an der Ursache</li>
+            <li>Auflösung von Scham und Schuld</li>
+          </ul>
+        </article>
+        <article class="reveal" style="--d:160ms">
+          <h3>Releasing</h3>
+          <ul>
+            <li>Loslassen innerer Widerstände und Anhaftungen</li>
+            <li>Familienverstrickungen und Anpassungsmuster</li>
+            <li>Emotionale Blockaden durch Fühlen und Annehmen</li>
+            <li>Intuitive Gefühlsarbeit</li>
+            <li>Was den natürlichen Selbstausdruck verhindert</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Stimmen ================= -->
+  <section id="stimmen">
+    <div class="wrap">
+      <p class="eyebrow reveal">Stimmen</p>
+      <h2 class="reveal measure" style="--d:50ms">Feedback meiner <em>Klienten.</em></h2>
+      <div class="stimmen reveal" style="--d:120ms">
+        <blockquote class="stimme">
+          <p>Daniel hat mich einige Monate begleitet. Sein Interesse am Menschen selbst ist sehr hoch, was sich durch seine einfühlsame und doch kompetente Art widerspiegelt. Eine klare Empfehlung für Menschen, die etwas verändern möchten.</p>
+          <p class="who">Felicitas</p>
+        </blockquote>
+        <blockquote class="stimme">
+          <p>Er geht mit offenen Augen durch die Welt und nimmt Dinge wahr, die anderen oft ein Leben lang verborgen bleiben. Ein einfühlsamer Coach, der weiß, wie er Menschen berührt und im jeweiligen Thema abholt.</p>
+          <p class="who">Ingo</p>
+        </blockquote>
+        <blockquote class="stimme">
+          <p>Ein super Impulsgeber. Er hat mich dazu gebracht, Dinge aus einem anderen Winkel zu betrachten. Auch die Hausaufgaben waren außerhalb der Komfortzone — das hat das Coaching noch wertvoller gemacht.</p>
+          <p class="who">Jens</p>
+        </blockquote>
+        <blockquote class="stimme">
+          <p>Dank Daniels ruhigem Wesen und seines aufmerksamen Zuhörens hatte ich immer ein wohltuendes Gefühl. Einfühlsam und kompetent hat er mir geholfen, Gedankenmuster aus der Vergangenheit zu erkennen.</p>
+          <p class="who">Morenda</p>
+        </blockquote>
+        <blockquote class="stimme">
+          <p>Dank Daniel verstehe ich jetzt die Wirkung der Glaubenssätze und wie ich diese Schritt für Schritt bearbeiten kann. Mit seiner ruhigen Art sorgt er für Übersicht, um die Themen nacheinander anzugehen.</p>
+          <p class="who">Matthias</p>
+        </blockquote>
+        <blockquote class="stimme">
+          <p>Zu jedem Moment fühlte ich mich gesehen und gehört. Seine Fragen haben mich überprüfen und verstehen lassen, was aktuell in mir aktiv war. Du bist ein Geschenk für die Menschen, die bereit sind, etwas zu verändern.</p>
+          <p class="who">Natascha</p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
   <!-- ================= 06 — FAQ ================= -->
   <section id="fragen">
     <div class="wrap">
@@ -260,6 +351,21 @@
         </details>
         <details class="qa"><summary>Ich habe schon viel ausprobiert. Warum sollte das anders sein? <span class="sign">+</span></summary>
           <p class="ans">Weil es hier nicht um mehr Verständnis geht, das du sammelst. Deine persönliche Geschichte zu verstehen, ist der erste wichtige Schritt. Doch das Verstehen allein verändert nichts. Erst eine erweiterte Perspektive, die das Bewusstsein miteinbezieht, macht dich frei von deiner Vergangenheit. Erst durch das richtige Denken erlaubst du dir, deine Neuronen neu zu verschalten und eine neue, authentische, freiere Version deiner selbst zu verkörpern.</p>
+        </details>
+        <details class="qa"><summary>Gibt es ein kostenloses Erstgespräch? <span class="sign">+</span></summary>
+          <p class="ans">Ja. Es dient dazu, einander kennenzulernen und zu spüren, ob sich die Zusammenarbeit für uns beide richtig anfühlt. Du kannst alle Fragen stellen.</p>
+        </details>
+        <details class="qa"><summary>Wie viel Zeit muss ich mir einplanen? <span class="sign">+</span></summary>
+          <p class="ans">Die 1-zu-1-Sessions dauern etwa 60 Minuten. Termine finden wir zu Tageszeiten, die passen. Plane zusätzlich Zeit für die Reflexion ein — damit das Besprochene wirken kann.</p>
+        </details>
+        <details class="qa"><summary>Was für eine Art Begleiter bist du? <span class="sign">+</span></summary>
+          <p class="ans">Meist höre ich, dass ich eine ruhige Ausstrahlung habe, in der man einfach sein darf. Ich verurteile nicht. Alles, was du fühlst, darf da sein und angeschaut werden. Mir sind eine ehrliche, respektvolle Art und Kommunikation auf Augenhöhe wichtig.</p>
+        </details>
+        <details class="qa"><summary>Ist eine Ratenzahlung möglich? <span class="sign">+</span></summary>
+          <p class="ans">Ja. Wie genau das aussieht, besprechen wir persönlich.</p>
+        </details>
+        <details class="qa"><summary>Werden meine Daten vertraulich behandelt? <span class="sign">+</span></summary>
+          <p class="ans">Ja. Alles, was wir besprechen, bleibt unter uns. Persönliche Daten gelangen nicht nach außen.</p>
         </details>
       </div>
     </div>
@@ -345,23 +451,35 @@
     </div>
   </section>
 
-  <!-- ================= Gedanken ================= -->
+  <!-- ================= Themen ================= -->
   <section class="essays" id="gedanken">
     <div class="wrap">
-      <p class="eyebrow reveal">Gedanken</p>
+      <p class="eyebrow reveal">Themen</p>
       <h2 class="reveal measure" style="--d:50ms">Zum Weiterlesen.</h2>
       <div class="essay-grid reveal" style="--d:120ms">
-        <a class="essay soon" href="#gespraech">
-          <span class="k">In Vorbereitung</span>
-          <h3>Energy follows thought</h3>
-          <p>Warum deine Aufmerksamkeit darüber entscheidet, wohin dein Leben sich bewegt — und wie unbemerkt das geschieht.</p>
-          <span class="more">Bald</span>
+        <a class="essay" href="selbstliebe.html">
+          <span class="k">Thema</span>
+          <h3>Selbstliebe</h3>
+          <p>Eine liebevolle Haltung dir gegenüber. Keine Selbstverwöhnung — der normale Umgang mit sich selbst.</p>
+          <span class="more">Lesen <span class="arr">→</span></span>
         </a>
-        <a class="essay soon" href="#gespraech">
-          <span class="k">In Vorbereitung</span>
-          <h3>Wie wir unsere Kraft abgeben</h3>
-          <p>An Menschen im Außen, an alte Verletzungen, an eine Vergangenheit, die wir gerne anders erlebt hätten.</p>
-          <span class="more">Bald</span>
+        <a class="essay" href="achtsamkeit.html">
+          <span class="k">Thema</span>
+          <h3>Achtsamkeit</h3>
+          <p>Das bewusste Wahrnehmen des Moments — statt Autopilot und Gewohnheit.</p>
+          <span class="more">Lesen <span class="arr">→</span></span>
+        </a>
+        <a class="essay" href="selbstbewusstsein.html">
+          <span class="k">Thema</span>
+          <h3>Selbstbewusstsein</h3>
+          <p>Innere Sicherheit: Du kennst dich, stehst zu dir und lässt dich nicht aus dem Konzept bringen.</p>
+          <span class="more">Lesen <span class="arr">→</span></span>
+        </a>
+        <a class="essay" href="meditation.html">
+          <span class="k">Thema</span>
+          <h3>Meditation</h3>
+          <p>In die Stille gehen und wahrnehmen, was ohnehin da ist. Der natürliche Urzustand.</p>
+          <span class="more">Lesen <span class="arr">→</span></span>
         </a>
       </div>
     </div>
@@ -376,9 +494,25 @@
         <p class="foot-line">Meine Mission ist es, weiterzugeben, was ich auf meinem Weg gelernt habe. Der nächste Schritt ist ein Gespräch.</p>
         <a class="btn btn-lg beam" href="#gespraech">Kostenloses Gespräch sichern <span class="arr">→</span></a>
         <p class="foot-micro">30–45&nbsp;Min · per Video oder Telefon · kostenlos &amp; unverbindlich</p>
+        <div class="soc">
+          <a href="https://www.instagram.com/daniel_kallenbach_/" rel="noopener" target="_blank">Instagram</a>
+          <a href="https://www.youtube.com/@daniel_kallenbach" rel="noopener" target="_blank">YouTube</a>
+          <a href="https://www.facebook.com/kallenbach.daniel" rel="noopener" target="_blank">Facebook</a>
+          <a href="https://www.tiktok.com/@daniel_kallenbach_" rel="noopener" target="_blank">TikTok</a>
+        </div>
+        <div class="foot-links">
+          <a href="selbstliebe.html">Selbstliebe</a>
+          <a href="achtsamkeit.html">Achtsamkeit</a>
+          <a href="selbstbewusstsein.html">Selbstbewusstsein</a>
+          <a href="meditation.html">Meditation</a>
+          <a href="ueber-mich.html">Über mich</a>
+          <a href="kontakt.html">Kontakt</a>
+          <a href="impressum.html">Impressum</a>
+          <a href="datenschutz.html">Datenschutz</a>
+        </div>
       </div>
       <div class="copyright">
-        <span>© 2026 Daniel Kallenbach · <a href="impressum.html">Impressum</a></span>
+        <span>© 2026 Daniel Kallenbach</span>
         <span class="credit"><a href="mailto:" data-mail>kontakt@daniel-kallenbach.de</a></span>
       </div>
     </div>
@@ -386,8 +520,8 @@
 
 </main>
 
-<script src="js/color.js?v=8"></script>
-<script src="js/energy-field.js?v=8"></script>
-<script src="js/site.js?v=8"></script>
+<script src="js/color.js?v=11"></script>
+<script src="js/energy-field.js?v=11"></script>
+<script src="js/site.js?v=11"></script>
 </body>
 </html>

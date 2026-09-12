@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kontakt — Daniel Kallenbach</title>
+<meta name="description" content="Kostenloses Erstgespräch mit Daniel Kallenbach. Schreib oder vereinbare einen Termin.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="author" content="Daniel Kallenbach">
+<meta name="theme-color" content="#08080a">
+<link rel="canonical" href="https://daniel-kallenbach.de/kontakt.html">
+<link rel="icon" href="assets/mark.png" type="image/png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://daniel-kallenbach.de/kontakt.html">
+<meta property="og:site_name" content="Daniel Kallenbach">
+<meta property="og:locale" content="de_DE">
+<meta property="og:title" content="Kontakt — Daniel Kallenbach">
+<meta property="og:description" content="Kostenloses Erstgespräch mit Daniel Kallenbach. Schreib oder vereinbare einen Termin.">
+<meta property="og:image" content="https://daniel-kallenbach.de/assets/hero.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=11">
+</head>
+<body>
+
+<div id="atmos" aria-hidden="true"></div>
+<div id="vignette" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"></div>
+
+<nav id="nav">
+  <a class="brand" href="index.html" aria-label="Daniel Kallenbach — Startseite">
+    <img class="vmark" src="assets/logo.png" alt="" width="288" height="213">
+    <span>Daniel&nbsp;Kallenbach</span>
+  </a>
+  <div class="nav-end">
+    <div class="nav-links" id="navLinks">
+      <a href="index.html">Start</a>
+      <div class="nav-drop">
+        <button type="button" class="nav-drop-btn" aria-expanded="false" aria-haspopup="true">Themen</button>
+        <div class="nav-drop-list">
+          <a href="selbstliebe.html">Selbstliebe</a>
+          <a href="achtsamkeit.html">Achtsamkeit</a>
+          <a href="selbstbewusstsein.html">Selbstbewusstsein</a>
+          <a href="meditation.html">Meditation</a>
+        </div>
+      </div>
+      <a href="ueber-mich.html">Über mich</a>
+      <a href="kontakt.html" class="is-on" aria-current="page">Kontakt</a>
+    </div>
+    <a class="btn beam" href="index.html#gespraech">Kostenloses Gespräch</a>
+    <button type="button" class="nav-toggle" id="navToggle" aria-label="Menü öffnen" aria-expanded="false"><span></span><span></span></button>
+  </div>
+</nav>
+
+<main class="shell">
+
+  <header class="page-hero">
+    <div class="wrap">
+      <p class="eyebrow reveal">Kontakt</p>
+      <h1 class="reveal" style="--d:50ms">Lass uns <em>sprechen.</em></h1>
+      <p class="lede reveal" style="--d:140ms">Wähle einen Termin für ein kostenloses Erstgespräch — oder schreib mir. Beides ist unverbindlich.</p>
+    </div>
+  </header>
+
+  <section class="call" style="padding-top:0">
+    <div class="wrap">
+      <div class="grid">
+        <div class="t">
+          <ul class="gains reveal">
+            <li><span class="g-ic">→</span><span>Klarheit darüber, wo du deine Kraft gerade abgibst.</span></li>
+            <li><span class="g-ic">→</span><span>Ein ehrlicher Blick von außen — mit Empathie, ohne Urteil.</span></li>
+            <li><span class="g-ic">→</span><span>Ein konkreter erster Schritt, den du sofort gehen kannst.</span></li>
+          </ul>
+          <p class="risk reveal" style="--d:120ms"><span class="pip"></span> 30–45&nbsp;Min · per Video oder Telefon · kostenlos &amp; unverbindlich</p>
+          <p class="verse measure reveal" style="--d:180ms; margin-top:2rem">
+            So erreichst du mich per E-Mail:<br>
+            <a href="mailto:" data-mail>kontakt@daniel-kallenbach.de</a>
+          </p>
+        </div>
+        <div class="m reveal" style="--d:80ms">
+          <div class="cardform" id="formCard">
+            <div class="bookswitch" role="tablist" aria-label="Kontaktart wählen">
+              <button type="button" class="bswitch is-on" id="bsw-cal" role="tab" aria-selected="true" aria-controls="pane-cal">Termin buchen</button>
+              <button type="button" class="bswitch" id="bsw-msg" role="tab" aria-selected="false" aria-controls="pane-msg">Nachricht senden</button>
+            </div>
+            <div class="bookpane" id="pane-cal" role="tabpanel" aria-labelledby="bsw-cal">
+              <p class="sub">Wähle direkt einen Termin, der dir passt — sofort bestätigt.</p>
+              <div class="cal-frame">
+                <div id="cal-widget" style="min-width:280px">
+                  <div class="cal-empty">
+                    <img class="cal-mark" src="assets/logo.png" alt="" width="288" height="213" loading="lazy">
+                    <span>Kalender noch nicht verbunden.<br>Calendly-Link in <b>js/site.js</b> eintragen.</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="bookpane" id="pane-msg" role="tabpanel" aria-labelledby="bsw-msg" hidden>
+              <h3>Sichere dir dein Gespräch</h3>
+              <p class="sub">Zwei Felder. Den Rest klären wir im Gespräch.</p>
+              <form id="callForm" novalidate>
+                <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+                <div class="field" id="wrap-name">
+                  <label for="f-name">Name</label>
+                  <input id="f-name" name="name" type="text" required autocomplete="name" placeholder="Dein Name">
+                </div>
+                <div class="field" id="wrap-email">
+                  <label for="f-email">E-Mail</label>
+                  <input id="f-email" name="email" type="email" required autocomplete="email" placeholder="du@beispiel.de">
+                </div>
+                <div class="field">
+                  <label for="f-msg">Worum geht es? <span class="opt">(optional)</span></label>
+                  <textarea id="f-msg" name="message" rows="3" placeholder="Was dich gerade bewegt …"></textarea>
+                </div>
+                <button class="btn btn-lg beam" type="submit" id="f-submit">Mein Gespräch sichern <span class="arr">→</span></button>
+                <p class="form-note">Nur Name und E-Mail. Ich melde mich persönlich — kein Funnel, keine Automatik.</p>
+                <p class="form-status" id="f-status" role="status" aria-live="polite"></p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="wrap">
+      <div class="foot-close reveal">
+        <img class="foot-logo" src="assets/logo.png" alt="" width="288" height="213" loading="lazy">
+        <p class="foot-name">Daniel&nbsp;Kallenbach</p>
+        <p class="foot-line">Meine Mission ist es, weiterzugeben, was ich auf meinem Weg gelernt habe. Der nächste Schritt ist ein Gespräch.</p>
+        <a class="btn btn-lg beam" href="index.html#gespraech">Kostenloses Gespräch sichern <span class="arr">→</span></a>
+        <p class="foot-micro">30–45&nbsp;Min · per Video oder Telefon · kostenlos &amp; unverbindlich</p>
+        <div class="soc">
+          <a href="https://www.instagram.com/daniel_kallenbach_/" rel="noopener" target="_blank">Instagram</a>
+          <a href="https://www.youtube.com/@daniel_kallenbach" rel="noopener" target="_blank">YouTube</a>
+          <a href="https://www.facebook.com/kallenbach.daniel" rel="noopener" target="_blank">Facebook</a>
+          <a href="https://www.tiktok.com/@daniel_kallenbach_" rel="noopener" target="_blank">TikTok</a>
+        </div>
+        <div class="foot-links">
+          <a href="selbstliebe.html">Selbstliebe</a>
+          <a href="achtsamkeit.html">Achtsamkeit</a>
+          <a href="selbstbewusstsein.html">Selbstbewusstsein</a>
+          <a href="meditation.html">Meditation</a>
+          <a href="ueber-mich.html">Über mich</a>
+          <a href="kontakt.html">Kontakt</a>
+          <a href="impressum.html">Impressum</a>
+          <a href="datenschutz.html">Datenschutz</a>
+        </div>
+      </div>
+      <div class="copyright">
+        <span>© 2026 Daniel Kallenbach</span>
+        <span class="credit"><a href="mailto:" data-mail>kontakt@daniel-kallenbach.de</a></span>
+      </div>
+    </div>
+  </footer>
+</main>
+
+<script src="js/color.js?v=11"></script>
+<script src="js/site.js?v=11"></script>
+</body>
+</html>
