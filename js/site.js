@@ -12,7 +12,7 @@
     /* Empfängeradresse für den Fallback und den Direktkontakt.            */
     email: 'kontakt@daniel-kallenbach.de',
     /* Calendly-Link. Leer lassen = Platzhalter im Buchungs-Tab.           */
-    calendly: ''
+    calendly: 'https://calendly.com/daniel_kallenbach'
   };
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -139,10 +139,13 @@
   (function () {
     var mount = document.getElementById('cal-widget');
     if (!mount || !CONFIG.calendly) return;
+    var url = CONFIG.calendly.split('?')[0] +
+      '?hide_gdpr_banner=1&background_color=0c0c0f&text_color=efece6';
     mount.innerHTML = '';
-    mount.setAttribute('data-url', CONFIG.calendly +
-      '?hide_gdpr_banner=1&background_color=0c0c0f&text_color=efece6');
+    mount.setAttribute('data-url', url);
     mount.className = 'calendly-inline-widget';
+    mount.style.minWidth = '320px';
+    mount.style.height = '700px';
     var s = document.createElement('script');
     s.src = 'https://assets.calendly.com/assets/external/widget.js';
     s.async = true;

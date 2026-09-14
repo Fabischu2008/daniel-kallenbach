@@ -1,0 +1,99 @@
+{
+  "domain": "https://daniel-kallenbach.de",
+  "stand": "2026-09-13",
+  "host_heute": "goneo",
+  "cms_heute": "WordPress",
+  "hinweis": "Live liegt die Seite bei goneo in WordPress. Domain daniel-kallenbach.de bleibt. cms_url ist der bestehende WordPress-Permalink — so muss die Seite nach dem Umbau erreichbar bleiben. Abweichende Pfade nur mit 301.",
+  "regeln": [
+    "Host und CMS bleiben goneo + WordPress, solange die Domain nicht umgezogen wird.",
+    "Permalink genau wie cms_url, mit abschließendem Schrägstrich.",
+    "Title und Description aus dieser Datei übernehmen.",
+    "Öffentliche Seiten: index, follow. Impressum und Datenschutz: noindex, follow.",
+    "Alte WordPress-Adressen nicht umbenennen. Nur wenn doch: 301 in WordPress (Redirection, Rank Math oder .htaccess).",
+    "Canonical = Permalink. Sitemap in WordPress neu erzeugen, mit denselben URLs.",
+    "Neues Design in das bestehende WordPress bauen. Texte nicht neu erfinden, solange der Umbau läuft."
+  ],
+  "seiten": [
+    {
+      "name": "Start",
+      "cms_url": "/",
+      "alte_wordpress_urls": ["/"],
+      "redirects_von": ["/index.html"],
+      "title": "Daniel Kallenbach — Bewusstsein. Verantwortung. Wirkung.",
+      "description": "Was du bist, strahlst du aus — ob es dir bewusst ist oder nicht. Daniel Kallenbach begleitet Menschen, die im Leben immer wieder an denselben Punkten scheitern. Kostenloses, unverbindliches Erstgespräch.",
+      "indexieren": true
+    },
+    {
+      "name": "Über mich",
+      "cms_url": "/ueber-mich/",
+      "alte_wordpress_urls": ["/ueber-mich/"],
+      "redirects_von": ["/ueber-mich.html"],
+      "title": "Über mich — Daniel Kallenbach",
+      "description": "Daniel Kallenbach ist psychologischer Berater. Er gibt weiter, was er auf seinem eigenen Weg gelernt hat — Bewusstsein, Selbstverantwortung und eine aufrichtige Beziehung zu sich selbst.",
+      "indexieren": true
+    },
+    {
+      "name": "Kontakt",
+      "cms_url": "/kontakt/",
+      "alte_wordpress_urls": ["/kontakt/"],
+      "redirects_von": ["/kontakt.html"],
+      "title": "Kontakt — Daniel Kallenbach",
+      "description": "Kostenloses Erstgespräch mit Daniel Kallenbach. Schreib oder vereinbare einen Termin.",
+      "indexieren": true
+    },
+    {
+      "name": "Selbstliebe",
+      "cms_url": "/selbstliebe/",
+      "alte_wordpress_urls": ["/selbstliebe/"],
+      "redirects_von": ["/selbstliebe.html"],
+      "title": "Selbstliebe — Daniel Kallenbach",
+      "description": "Selbstliebe ist eine liebevolle innere Haltung voller Wertschätzung dir gegenüber. Keine Selbstverwöhnung — der normale Umgang mit sich selbst.",
+      "indexieren": true
+    },
+    {
+      "name": "Achtsamkeit",
+      "cms_url": "/achtsamkeit/",
+      "alte_wordpress_urls": ["/achtsamkeit/"],
+      "redirects_von": ["/achtsamkeit.html"],
+      "title": "Achtsamkeit — Daniel Kallenbach",
+      "description": "Achtsamkeit ist das bewusste Wahrnehmen des gegenwärtigen Moments. Das Gegenteil ist Autopilot — Gewohnheiten abspulen, ohne den Moment zu würdigen.",
+      "indexieren": true
+    },
+    {
+      "name": "Selbstbewusstsein",
+      "cms_url": "/selbstbewusstsein/",
+      "alte_wordpress_urls": ["/selbstbewusstsein/"],
+      "redirects_von": ["/selbstbewusstsein.html"],
+      "title": "Selbstbewusstsein — Daniel Kallenbach",
+      "description": "Selbstbewusstsein ist innere Sicherheit: Du kennst dich, stehst zu dir und lässt dich nicht ständig aus dem Konzept bringen.",
+      "indexieren": true
+    },
+    {
+      "name": "Meditation",
+      "cms_url": "/meditation/",
+      "alte_wordpress_urls": ["/meditation/"],
+      "redirects_von": ["/meditation.html"],
+      "title": "Meditation — Daniel Kallenbach",
+      "description": "Meditation ist eine Form der Achtsamkeit: bewusst und präsent den Moment wahrnehmen. Der angestrebte Zustand ist unser natürlicher Urzustand.",
+      "indexieren": true
+    },
+    {
+      "name": "Impressum",
+      "cms_url": "/impressum/",
+      "alte_wordpress_urls": ["/impressum/"],
+      "redirects_von": ["/impressum.html"],
+      "title": "Impressum — Daniel Kallenbach",
+      "description": "",
+      "indexieren": false
+    },
+    {
+      "name": "Datenschutz",
+      "cms_url": "/datenschutz/",
+      "alte_wordpress_urls": ["/datenschutz/", "/datenschutzerklaerung/"],
+      "redirects_von": ["/datenschutz.html"],
+      "title": "Datenschutz — Daniel Kallenbach",
+      "description": "",
+      "indexieren": false
+    }
+  ]
+}

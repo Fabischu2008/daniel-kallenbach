@@ -375,7 +375,7 @@ picture{display:contents}
 .bookpane[hidden]{display:none}
 .cal-frame{position:relative; border-radius:14px; overflow:hidden;
   border:1px solid var(--line-2); background:var(--bg-2)}
-#cal-widget{border-radius:14px; min-height:630px}
+#cal-widget{border-radius:14px; min-height:700px; height:700px}
 .cal-empty{display:flex; flex-direction:column; align-items:center; justify-content:center;
   gap:1.4em; height:630px; padding:32px; text-align:center;
   color:var(--ink-faint); font-family:var(--sans); font-size:.85rem;
