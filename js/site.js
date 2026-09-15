@@ -8,7 +8,7 @@
   var CONFIG = {
     /* Ziel für das Kontaktformular. Leer lassen = E-Mail-Fallback.
        Beispiele: 'kontakt.php'  |  'https://formspree.io/f/xxxxxxx'      */
-    formEndpoint: '',
+    formEndpoint: (window.DK_WP && window.DK_WP.form) || '',
     /* Empfängeradresse für den Fallback und den Direktkontakt.            */
     email: 'kontakt@daniel-kallenbach.de',
     /* Calendly-Link. Leer lassen = Platzhalter im Buchungs-Tab.           */
@@ -218,9 +218,12 @@
 
       if (!CONFIG.formEndpoint) { fallback(); return; }
 
+      var payload = new FormData(form);
+      if (window.DK_WP && window.DK_WP.action) payload.append('action', window.DK_WP.action);
+
       fetch(CONFIG.formEndpoint, {
         method: 'POST',
-        body: new FormData(form),
+        body: payload,
         headers: { 'Accept': 'application/json', 'X-Requested-With': 'fetch' }
       })
         .then(function (r) { return r.ok ? r.json() : Promise.reject(r.status); })
