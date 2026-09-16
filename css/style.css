@@ -205,11 +205,11 @@ h1{font-size:clamp(2.6rem, 1.2rem + 5vw, 4.9rem); line-height:1.04; letter-spaci
 h2{font-size:clamp(1.95rem, 1.1rem + 3vw, 3.5rem); line-height:1.1; letter-spacing:-.022em}
 h1 em, h2 em, .accent{font-style:normal; color:var(--energy); transition:color .6s linear}
 .lede{font-family:var(--serif); color:var(--ink);
-  font-size:clamp(1.3rem,.9rem+1vw,1.7rem); line-height:1.45}
+  font-size:clamp(1.3rem,.9rem + 1vw,1.7rem); line-height:1.45}
 p{margin:0 0 1.1em}
 
 /* Manifest-Fluss: kurze, verdichtete Zeilen */
-.verse{color:var(--ink-dim); font-size:clamp(1.18rem,.9rem+.8vw,1.46rem);
+.verse{color:var(--ink-dim); font-size:clamp(1.18rem,.9rem + .8vw,1.46rem);
   line-height:1.66; letter-spacing:.004em}
 .verse p{margin:0 0 .55em}
 .verse .gap{height:1.35em}
@@ -236,7 +236,7 @@ picture{display:contents}
 .hero .rotor{text-shadow:0 1px 22px rgba(0,0,0,.5)}
 .hero .cta-micro{color:var(--ink-dim)}
 .rotor{font-family:var(--serif); font-style:normal; margin-top:1.6rem;
-  font-size:clamp(1.35rem,.95rem+1.1vw,1.85rem); color:var(--ink-dim); line-height:1.3}
+  font-size:clamp(1.35rem,.95rem + 1.1vw,1.85rem); color:var(--ink-dim); line-height:1.3}
 .rotor .word{color:var(--energy); font-style:normal; display:inline-block; min-width:1ch;
   transition:opacity .5s var(--ease), filter .5s var(--ease), transform .5s var(--ease)}
 .rotor .word.out{opacity:0; filter:blur(7px); transform:translateY(-.12em)}
@@ -263,7 +263,7 @@ picture{display:contents}
 /* ---------- Pull-Quote ---------- */
 .pull{padding-block:clamp(96px,17vh,190px); text-align:center}
 .pull blockquote{margin:0 auto; max-width:22ch; font-family:var(--serif); font-weight:500;
-  font-size:clamp(2.2rem,1.1rem+3.8vw,4.4rem); line-height:1.1; letter-spacing:-.018em; color:var(--ink)}
+  font-size:clamp(2.2rem,1.1rem + 3.8vw,4.4rem); line-height:1.1; letter-spacing:-.018em; color:var(--ink)}
 .pull .src{margin-top:1.7rem; font-family:var(--sans); font-size:.72rem; letter-spacing:.24em;
   text-transform:uppercase; color:var(--ink-faint)}
 
@@ -271,7 +271,7 @@ picture{display:contents}
 .define{border-left:1px solid hsl(var(--eh) var(--es) var(--el) / .55);
   padding-left:clamp(20px,3vw,36px); margin:2.2rem 0 .4rem; transition:border-color .6s linear}
 .define p{font-family:var(--serif); color:var(--ink);
-  font-size:clamp(1.3rem,.95rem+1vw,1.7rem); line-height:1.42; margin:0}
+  font-size:clamp(1.3rem,.95rem + 1vw,1.7rem); line-height:1.42; margin:0}
 
 /* ---------- Sechs Kräfte ---------- */
 .kraefte{display:grid; grid-template-columns:1fr; margin-top:clamp(44px,6vw,76px);
@@ -281,13 +281,13 @@ picture{display:contents}
   padding:clamp(24px,3vw,34px) 0; border-bottom:1px solid var(--line); align-items:baseline}
 .kraft .no{font-family:var(--sans); font-weight:500; font-size:.74rem; letter-spacing:.06em;
   color:hsl(var(--eh) var(--es) var(--el) / .85); padding-top:.5em; transition:color .6s linear}
-.kraft h3{font-size:clamp(1.75rem,1rem+1.8vw,2.45rem); line-height:1.05; margin-bottom:.3em}
+.kraft h3{font-size:clamp(1.75rem,1rem + 1.8vw,2.45rem); line-height:1.05; margin-bottom:.3em}
 .kraft p{margin:0; color:var(--ink-dim); font-size:1.08rem; line-height:1.42}
 
 /* ---------- Manifest-Liste ---------- */
 .creed{list-style:none; margin:clamp(36px,5vw,60px) 0 0; padding:0; max-width:32ch}
 .creed li{font-family:var(--serif); font-weight:400;
-  font-size:clamp(1.5rem,1rem+2.1vw,2.5rem); line-height:1.24; color:var(--ink-dim);
+  font-size:clamp(1.5rem,1rem + 2.1vw,2.5rem); line-height:1.24; color:var(--ink-dim);
   padding:.36em 0; border-bottom:1px solid var(--line)}
 .creed li b{color:var(--ink); font-weight:500}
 .creed li:last-child{border-bottom:0}
@@ -298,7 +298,7 @@ picture{display:contents}
 .qa{border-bottom:1px solid var(--line)}
 .qa summary{list-style:none; cursor:pointer; padding:1.25em 0; display:flex; gap:1em;
   align-items:baseline; justify-content:space-between; font-family:var(--serif);
-  font-size:clamp(1.3rem,.95rem+.8vw,1.6rem); color:var(--ink); transition:color .3s var(--ease)}
+  font-size:clamp(1.3rem,.95rem + .8vw,1.6rem); color:var(--ink); transition:color .3s var(--ease)}
 .qa summary::-webkit-details-marker{display:none}
 .qa summary:hover{color:#fff}
 .qa .sign{font-family:var(--sans); font-size:1.4rem; line-height:1;
@@ -311,8 +311,11 @@ picture{display:contents}
 /* ---------- Call / Formular ---------- */
 .call{position:relative}
 .call .grid{display:grid; grid-template-columns:1fr; gap:clamp(44px,6vw,84px); align-items:center}
+/* Rasterspalten sind von sich aus mindestens so breit wie ihr Inhalt und
+   schoben die Spalte auf Handys ueber den Rand. `0` gibt sie zum Schrumpfen frei. */
+.call .grid > *{min-width:0}
 @media(min-width:1000px){.call .grid{grid-template-columns:1.05fr .95fr}}
-.call h2{font-size:clamp(2.4rem,1.4rem+4vw,4.6rem)}
+.call h2{font-size:clamp(2.4rem,1.4rem + 4vw,4.6rem)}
 .cta-micro{font-family:var(--sans); font-size:.8rem; letter-spacing:.04em;
   color:var(--ink-faint); margin:1.4rem 0 0}
 .gains{list-style:none; margin:1.8rem 0 0; padding:0; max-width:46ch;
@@ -330,7 +333,7 @@ picture{display:contents}
 .cardform{background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.008));
   border:1px solid var(--line-2); border-radius:20px; padding:clamp(26px,3.4vw,40px);
   backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px)}
-.cardform h3{font-size:clamp(1.5rem,1rem+1.1vw,2rem); margin-bottom:.25em}
+.cardform h3{font-size:clamp(1.5rem,1rem + 1.1vw,2rem); margin-bottom:.25em}
 .cardform .sub{font-family:var(--sans); font-size:.9rem; color:var(--ink-faint); margin-bottom:1.6em}
 .field{display:flex; flex-direction:column; gap:.5em; margin-bottom:1.05em}
 .field label{font-family:var(--sans); font-size:.72rem; letter-spacing:.16em;
@@ -393,7 +396,7 @@ picture{display:contents}
 .essay:hover{background:var(--bg-2)}
 .essay .k{font-family:var(--sans); font-size:.66rem; letter-spacing:.22em; text-transform:uppercase;
   color:hsl(var(--eh) var(--es) var(--el) / .85); transition:color .6s linear}
-.essay h3{font-size:clamp(1.5rem,1rem+1.1vw,2rem); margin:.7em 0 .4em; line-height:1.12}
+.essay h3{font-size:clamp(1.5rem,1rem + 1.1vw,2rem); margin:.7em 0 .4em; line-height:1.12}
 .essay p{font-family:var(--sans); font-size:.95rem; color:var(--ink-dim); margin:0; line-height:1.55}
 .essay .more{font-family:var(--sans); font-size:.8rem; color:var(--ink-faint);
   margin-top:1.1em; display:inline-flex; gap:.5em; align-items:center}
@@ -410,7 +413,7 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
 .foot-name{font-family:var(--sans); font-weight:500; font-size:.78rem;
   letter-spacing:.32em; text-transform:uppercase; color:var(--ink); margin:0 0 1.9rem}
 .foot-line{font-family:var(--serif); font-weight:500;
-  font-size:clamp(1.35rem,1rem+1.5vw,2rem); line-height:1.32; letter-spacing:-.01em;
+  font-size:clamp(1.35rem,1rem + 1.5vw,2rem); line-height:1.32; letter-spacing:-.01em;
   color:var(--ink); max-width:22ch; margin-bottom:2.1rem}
 .foot-micro{margin-top:1.4rem; font-family:var(--sans); font-size:.82rem;
   letter-spacing:.02em; color:var(--ink-faint)}
@@ -432,10 +435,10 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
 .eb-eyebrow{justify-content:center; color:var(--ink-faint); margin-bottom:1.5em}
 .eb-eyebrow::before{display:none}
 .eb-line{font-family:var(--serif); font-weight:600;
-  font-size:clamp(1.9rem,1rem+3vw,3.3rem); letter-spacing:-.02em; line-height:1.05;
+  font-size:clamp(1.9rem,1rem + 3vw,3.3rem); letter-spacing:-.02em; line-height:1.05;
   color:var(--ink); margin:0; text-shadow:0 2px 50px rgba(0,0,0,.7)}
 .eb-sub{font-family:var(--serif); font-weight:400;
-  font-size:clamp(1.2rem,.9rem+1vw,1.7rem); color:var(--ink-dim);
+  font-size:clamp(1.2rem,.9rem + 1vw,1.7rem); color:var(--ink-dim);
   margin:.35em 0 0; text-shadow:0 2px 40px rgba(0,0,0,.7)}
 .eb-hint{position:absolute; left:50%; transform:translateX(-50%); bottom:30px; z-index:2;
   font-family:var(--sans); font-size:.62rem; letter-spacing:.26em; text-transform:uppercase;
@@ -460,6 +463,14 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
 }
 
 ::selection{background:hsl(var(--eh) var(--es) var(--el) / .32); color:#fff}
+
+@media(max-width:480px){
+  /* Deutsche Komposita wie „Selbstvertrauen" werden in einer Überschrift
+     breiter als die Spalte und liefen bisher unter `overflow-x:hidden`
+     rechts aus dem Bild. Die Trennung greift nur hier, damit die gesetzten
+     Zeilenumbrüche auf grösseren Bildschirmen unberührt bleiben. */
+  h1, h2, h3, .gains li{-webkit-hyphens:auto; hyphens:auto; overflow-wrap:break-word}
+}
 
 @media(max-width:520px){
   /* Schriftzug und Button stehen beide auf `white-space:nowrap` und können
@@ -533,7 +544,7 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
   background:var(--line); border:1px solid var(--line); border-radius:16px; overflow:hidden}
 @media(min-width:840px){.stimmen{grid-template-columns:1fr 1fr}}
 .stimme{background:var(--bg); padding:clamp(26px,3vw,36px)}
-.stimme p{font-family:var(--serif); font-size:clamp(1.05rem,.9rem+.4vw,1.2rem);
+.stimme p{font-family:var(--serif); font-size:clamp(1.05rem,.9rem + .4vw,1.2rem);
   line-height:1.55; color:var(--ink-dim); margin:0 0 1.2em}
 .stimme .who{font-family:var(--sans); font-size:.7rem; letter-spacing:.18em;
   text-transform:uppercase; color:var(--ink-faint); margin:0}
@@ -542,7 +553,7 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
   margin-top:clamp(40px,5vw,68px)}
 @media(min-width:900px){.schwer{grid-template-columns:1fr 1fr 1fr}}
 .schwer article{border-top:1px solid var(--line); padding-top:1.4rem}
-.schwer h3{font-size:clamp(1.45rem,1rem+1vw,1.9rem); margin-bottom:.7em}
+.schwer h3{font-size:clamp(1.45rem,1rem + 1vw,1.9rem); margin-bottom:.7em}
 .schwer ul{margin:0; padding:0; list-style:none}
 .schwer li{font-family:var(--sans); font-size:.98rem; line-height:1.5; color:var(--ink-dim);
   padding:.42em 0 .42em 1.1em; position:relative}
@@ -551,7 +562,7 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
 .tips{list-style:none; margin:clamp(28px,4vw,44px) 0 0; padding:0; max-width:68ch}
 .tips li{display:grid; grid-template-columns:auto 1fr; gap:1em; align-items:baseline;
   padding:1.05em 0; border-bottom:1px solid var(--line); color:var(--ink-dim);
-  font-size:clamp(1.05rem,.9rem+.35vw,1.2rem); line-height:1.5}
+  font-size:clamp(1.05rem,.9rem + .35vw,1.2rem); line-height:1.5}
 .tips .no{font-family:var(--sans); font-size:.74rem; letter-spacing:.06em;
   color:hsl(var(--eh) var(--es) var(--el) / .85)}
 
