@@ -425,6 +425,12 @@ footer{border-top:1px solid var(--line); padding:clamp(56px,8vh,92px) 0 48px;
   transition:color .4s linear, border-color .4s linear}
 .copyright a:hover{color:var(--ink); border-color:var(--ink-dim)}
 .credit{color:var(--ink-faint)}
+.madeby{margin:16px 0 0; text-align:center;
+  font-family:var(--sans); font-size:.68rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--ink-faint)}
+.madeby a{color:var(--ink-faint); text-decoration:none; border-bottom:1px solid transparent;
+  transition:color .4s linear, border-color .4s linear}
+.madeby a:hover{color:var(--ink); border-color:var(--ink-dim)}
 
 /* ---------- Energiekörper-Bühne ---------- */
 .energybody{position:relative; min-height:118vh; z-index:3;
