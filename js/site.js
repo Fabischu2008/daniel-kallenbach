@@ -14,7 +14,9 @@
     /* Calendly-Link. Leer lassen = Platzhalter im Buchungs-Tab.           */
     calendly: 'https://calendly.com/daniel_kallenbach',
     /* Google Analytics 4 Mess-ID. Leer = kein Tracking. */
-    gaId: (window.DK_WP && window.DK_WP.gaId) || 'G-L9E1F6FEBW'
+    gaId: (window.DK_WP && window.DK_WP.gaId) || 'G-L9E1F6FEBW',
+    /* Contentsquare Tag-ID */
+    csId: 'f685a3651e094'
   };
 
   var CONSENT_KEY = 'dk_cookie_consent';
@@ -42,6 +44,21 @@
     s.async = true;
     s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
     document.head.appendChild(s);
+  }
+
+  function loadContentsquare() {
+    var id = CONFIG.csId;
+    if (!id || document.getElementById('dk-cs')) return;
+    (function (c, s, q, u, a, r, e) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      e = s.createElement(q);
+      e.id = 'dk-cs';
+      e.async = 1;
+      e.src = u;
+      r = s.getElementsByTagName(q)[0];
+      if (r && r.parentNode) r.parentNode.insertBefore(e, r);
+      else s.head.appendChild(e);
+    })(window, document, 'script', 'https://t.contentsquare.net/uxa/' + id + '.js', '_uxa');
   }
 
   var calendlyLoaded = false;
@@ -83,6 +100,7 @@
   function applyConsent(value) {
     if (value === 'all') {
       loadAnalytics();
+      loadContentsquare();
       loadCalendly();
     }
   }
@@ -97,7 +115,7 @@
     bar.innerHTML =
       '<div class="cookie-inner">' +
         '<p id="cookie-bar-title">Diese Seite verwendet Cookies.</p>' +
-        '<p class="cookie-copy">Technisch nötige Cookies halten die Seite lauffähig. Statistik-Cookies (Google Analytics) und der Terminkalender von Calendly werden nur gesetzt, wenn du zustimmst. So sehe ich, welche Seiten wirken — ohne Tracking gegen deinen Willen. <a href="' + privacyHref() + '">Datenschutz</a></p>' +
+        '<p class="cookie-copy">Technisch nötige Cookies halten die Seite lauffähig. Statistik (Google Analytics, Contentsquare) und der Terminkalender von Calendly werden nur gesetzt, wenn du zustimmst. So sehe ich, welche Seiten wirken — ohne Tracking gegen deinen Willen. <a href="' + privacyHref() + '">Datenschutz</a></p>' +
         '<div class="cookie-actions">' +
           '<button type="button" class="btn" data-cookie="all">Alle akzeptieren</button>' +
           '<button type="button" class="btn btn-ghost" data-cookie="needed">Nur notwendige</button>' +
