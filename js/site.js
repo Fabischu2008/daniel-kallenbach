@@ -115,7 +115,7 @@
     bar.innerHTML =
       '<div class="cookie-inner">' +
         '<p id="cookie-bar-title">Diese Seite verwendet Cookies.</p>' +
-        '<p class="cookie-copy">Technisch nötige Cookies halten die Seite lauffähig. Statistik (Google Analytics, Contentsquare) und der Terminkalender von Calendly werden nur gesetzt, wenn du zustimmst. So sehe ich, welche Seiten wirken — ohne Tracking gegen deinen Willen. <a href="' + privacyHref() + '">Datenschutz</a></p>' +
+        '<p class="cookie-copy">Technisch nötige Cookies halten die Seite lauffähig. Statistik (Google Analytics, Hotjar) und der Terminkalender von Calendly werden nur gesetzt, wenn du zustimmst. So sehe ich, welche Seiten wirken — ohne Tracking gegen deinen Willen. <a href="' + privacyHref() + '">Datenschutz</a></p>' +
         '<div class="cookie-actions">' +
           '<button type="button" class="btn" data-cookie="all">Alle akzeptieren</button>' +
           '<button type="button" class="btn btn-ghost" data-cookie="needed">Nur notwendige</button>' +
