@@ -48,17 +48,20 @@
 
   function loadContentsquare() {
     var id = CONFIG.csId;
-    if (!id || document.getElementById('dk-cs')) return;
-    (function (c, s, q, u, a, r, e) {
-      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
-      e = s.createElement(q);
-      e.id = 'dk-cs';
-      e.async = 1;
-      e.src = u;
-      r = s.getElementsByTagName(q)[0];
-      if (r && r.parentNode) r.parentNode.insertBefore(e, r);
-      else s.head.appendChild(e);
-    })(window, document, 'script', 'https://t.contentsquare.net/uxa/' + id + '.js', '_uxa');
+    var src = 'https://t.contentsquare.net/uxa/' + id + '.js';
+    if (!id || document.querySelector('script[data-dk-cs-on]')) return;
+    window._uxa = window._uxa || [];
+    window._uxa.push(['setPath', window.location.pathname + window.location.hash.replace('#', '?__')]);
+    var s = document.createElement('script');
+    s.async = true;
+    s.src = src;
+    s.setAttribute('data-dk-cs-on', '1');
+    var placeholder = document.getElementById('dk-cs');
+    if (placeholder && placeholder.parentNode) {
+      placeholder.parentNode.replaceChild(s, placeholder);
+    } else {
+      document.head.appendChild(s);
+    }
   }
 
   var calendlyLoaded = false;
@@ -106,30 +109,48 @@
   }
 
   function mountCookieBar() {
-    if (document.getElementById('cookie-bar')) return;
+    if (document.getElementById('dk-notice')) return;
     var bar = document.createElement('aside');
-    bar.id = 'cookie-bar';
+    bar.id = 'dk-notice';
     bar.setAttribute('role', 'dialog');
-    bar.setAttribute('aria-labelledby', 'cookie-bar-title');
+    bar.setAttribute('aria-labelledby', 'dk-notice-title');
     bar.setAttribute('aria-live', 'polite');
     bar.innerHTML =
-      '<div class="cookie-inner">' +
-        '<p id="cookie-bar-title">Diese Seite verwendet Cookies.</p>' +
-        '<p class="cookie-copy">Technisch nötige Cookies halten die Seite lauffähig. Statistik (Google Analytics, Hotjar) und der Terminkalender von Calendly werden nur gesetzt, wenn du zustimmst. So sehe ich, welche Seiten wirken — ohne Tracking gegen deinen Willen. <a href="' + privacyHref() + '">Datenschutz</a></p>' +
-        '<div class="cookie-actions">' +
-          '<button type="button" class="btn" data-cookie="all">Alle akzeptieren</button>' +
-          '<button type="button" class="btn btn-ghost" data-cookie="needed">Nur notwendige</button>' +
+      '<div class="dk-notice-inner">' +
+        '<p id="dk-notice-title">Diese Seite verwendet Cookies.</p>' +
+        '<p class="dk-notice-copy">Technisch nötige Cookies halten die Seite lauffähig. Statistik (Google Analytics, Hotjar) und der Terminkalender von Calendly werden nur gesetzt, wenn du zustimmst. So sehe ich, welche Seiten wirken — ohne Tracking gegen deinen Willen. <a href="' + privacyHref() + '">Datenschutz</a></p>' +
+        '<div class="dk-notice-actions">' +
+          '<button type="button" class="btn" data-opt="all">Alle akzeptieren</button>' +
+          '<button type="button" class="btn btn-ghost" data-opt="needed">Nur notwendige</button>' +
         '</div>' +
       '</div>';
     document.body.appendChild(bar);
-    bar.querySelector('[data-cookie="all"]').addEventListener('click', function () {
+    bar.querySelector('[data-opt="all"]').addEventListener('click', function () {
       setConsent('all');
       bar.remove();
       applyConsent('all');
     });
-    bar.querySelector('[data-cookie="needed"]').addEventListener('click', function () {
+    bar.querySelector('[data-opt="needed"]').addEventListener('click', function () {
       setConsent('needed');
       bar.remove();
+    });
+  }
+
+  function addNoticeLink() {
+    document.querySelectorAll('.foot-links, .legal-nav').forEach(function (host) {
+      if (host.querySelector('[data-dk-notice]')) return;
+      var a = document.createElement('a');
+      a.href = '#';
+      a.setAttribute('data-dk-notice', '1');
+      a.textContent = 'Cookies';
+      a.addEventListener('click', function (e) {
+        e.preventDefault();
+        try { localStorage.removeItem(CONSENT_KEY); } catch (err) {}
+        var old = document.getElementById('dk-notice');
+        if (old) old.remove();
+        mountCookieBar();
+      });
+      host.appendChild(a);
     });
   }
 
@@ -138,6 +159,7 @@
   } else {
     mountCookieBar();
   }
+  addNoticeLink();
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var root = document.documentElement;
