@@ -12,8 +12,114 @@
     /* Empfängeradresse für den Fallback und den Direktkontakt.            */
     email: 'kontakt@daniel-kallenbach.de',
     /* Calendly-Link. Leer lassen = Platzhalter im Buchungs-Tab.           */
-    calendly: 'https://calendly.com/daniel_kallenbach'
+    calendly: 'https://calendly.com/daniel_kallenbach',
+    /* Google Analytics 4 Mess-ID. Leer = kein Tracking. */
+    gaId: (window.DK_WP && window.DK_WP.gaId) || 'G-L9E1F6FEBW'
   };
+
+  var CONSENT_KEY = 'dk_cookie_consent';
+
+  function getConsent() {
+    try { return localStorage.getItem(CONSENT_KEY) || ''; } catch (e) { return ''; }
+  }
+  function setConsent(value) {
+    try { localStorage.setItem(CONSENT_KEY, value); } catch (e) {}
+  }
+  function privacyHref() {
+    var a = document.querySelector('a[href*="datenschutz"]');
+    return (a && a.getAttribute('href')) || 'datenschutz/';
+  }
+
+  function loadAnalytics() {
+    var id = CONFIG.gaId;
+    if (!id || document.getElementById('dk-ga')) return;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag('js', new Date());
+    window.gtag('config', id, { anonymize_ip: true });
+    var s = document.createElement('script');
+    s.id = 'dk-ga';
+    s.async = true;
+    s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+    document.head.appendChild(s);
+  }
+
+  var calendlyLoaded = false;
+  function calendlyEmbedUrl() {
+    return CONFIG.calendly.split('?')[0] +
+      '?hide_gdpr_banner=1' +
+      '&embed_domain=' + encodeURIComponent(window.location.hostname) +
+      '&embed_type=Inline' +
+      '&background_color=0c0c0f&text_color=efece6';
+  }
+  function loadCalendly() {
+    var mount = document.getElementById('cal-widget');
+    if (!mount || !CONFIG.calendly || calendlyLoaded) return;
+    calendlyLoaded = true;
+    var url = calendlyEmbedUrl();
+    mount.innerHTML = '';
+    mount.removeAttribute('data-url');
+    mount.className = 'calendly-inline-widget';
+    mount.style.minWidth = '320px';
+    mount.style.height = '700px';
+    function init() {
+      if (!window.Calendly || !window.Calendly.initInlineWidget) return;
+      window.Calendly.initInlineWidget({
+        url: url,
+        parentElement: mount
+      });
+    }
+    if (window.Calendly && window.Calendly.initInlineWidget) {
+      init();
+      return;
+    }
+    var s = document.createElement('script');
+    s.src = 'https://assets.calendly.com/assets/external/widget.js';
+    s.async = true;
+    s.onload = init;
+    document.body.appendChild(s);
+  }
+
+  function applyConsent(value) {
+    if (value === 'all') {
+      loadAnalytics();
+      loadCalendly();
+    }
+  }
+
+  function mountCookieBar() {
+    if (document.getElementById('cookie-bar')) return;
+    var bar = document.createElement('aside');
+    bar.id = 'cookie-bar';
+    bar.setAttribute('role', 'dialog');
+    bar.setAttribute('aria-labelledby', 'cookie-bar-title');
+    bar.setAttribute('aria-live', 'polite');
+    bar.innerHTML =
+      '<div class="cookie-inner">' +
+        '<p id="cookie-bar-title">Diese Seite verwendet Cookies.</p>' +
+        '<p class="cookie-copy">Technisch nötige Cookies halten die Seite lauffähig. Statistik-Cookies (Google Analytics) und der Terminkalender von Calendly werden nur gesetzt, wenn du zustimmst. So sehe ich, welche Seiten wirken — ohne Tracking gegen deinen Willen. <a href="' + privacyHref() + '">Datenschutz</a></p>' +
+        '<div class="cookie-actions">' +
+          '<button type="button" class="btn" data-cookie="all">Alle akzeptieren</button>' +
+          '<button type="button" class="btn btn-ghost" data-cookie="needed">Nur notwendige</button>' +
+        '</div>' +
+      '</div>';
+    document.body.appendChild(bar);
+    bar.querySelector('[data-cookie="all"]').addEventListener('click', function () {
+      setConsent('all');
+      bar.remove();
+      applyConsent('all');
+    });
+    bar.querySelector('[data-cookie="needed"]').addEventListener('click', function () {
+      setConsent('needed');
+      bar.remove();
+    });
+  }
+
+  if (getConsent()) {
+    applyConsent(getConsent());
+  } else {
+    mountCookieBar();
+  }
 
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var root = document.documentElement;
@@ -133,23 +239,11 @@
 
     /* Ohne konfigurierten Kalender direkt das Formular zeigen */
     if (!CONFIG.calendly) show(false);
-  })();
 
-  /* ---- Calendly nur laden, wenn ein Link hinterlegt ist ----------------- */
-  (function () {
-    var mount = document.getElementById('cal-widget');
-    if (!mount || !CONFIG.calendly) return;
-    var url = CONFIG.calendly.split('?')[0] +
-      '?hide_gdpr_banner=1&background_color=0c0c0f&text_color=efece6';
-    mount.innerHTML = '';
-    mount.setAttribute('data-url', url);
-    mount.className = 'calendly-inline-widget';
-    mount.style.minWidth = '320px';
-    mount.style.height = '700px';
-    var s = document.createElement('script');
-    s.src = 'https://assets.calendly.com/assets/external/widget.js';
-    s.async = true;
-    document.body.appendChild(s);
+    bCal.addEventListener('click', function () {
+      if (getConsent() === 'all') loadCalendly();
+      else if (!getConsent()) mountCookieBar();
+    });
   })();
 
   /* ---- Kontaktformular -------------------------------------------------- */

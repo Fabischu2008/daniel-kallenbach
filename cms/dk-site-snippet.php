@@ -10,7 +10,7 @@ if (!defined('ABSPATH')) {
 
 define('DK_SITE_MAIL', 'kontakt@daniel-kallenbach.de');
 define('DK_SITE_GH', 'https://fabischu2008.github.io/daniel-kallenbach/');
-define('DK_SITE_ASSET_VER', '18');
+define('DK_SITE_ASSET_VER', '19');
 
 function dk_site_page_map()
 {
@@ -158,7 +158,7 @@ function dk_site_js()
 {
     $js = dk_site_local_file('js/site.js');
     if ($js === '') {
-        $js = dk_site_fetch('js/site.js?v=16');
+        $js = dk_site_fetch('js/site.js?v=18');
     }
     if ($js === '') {
         return '';
