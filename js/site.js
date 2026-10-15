@@ -46,6 +46,45 @@
     document.head.appendChild(s);
   }
 
+  function trackGa(name, params) {
+    if (getConsent() !== 'all' || !CONFIG.gaId) return;
+    if (typeof window.gtag !== 'function') return;
+    window.gtag('event', name, params || {});
+  }
+
+  function calendlyOriginOk(origin) {
+    if (origin === window.location.origin) return true;
+    try {
+      var host = new URL(origin).hostname;
+      return host === 'calendly.com' || host.slice(-13) === '.calendly.com';
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function bindCalendlyAnalytics() {
+    if (window.__dkCalendlyGa) return;
+    window.__dkCalendlyGa = true;
+    window.addEventListener('message', function (e) {
+      if (!calendlyOriginOk(e.origin)) return;
+      var ev = e.data && e.data.event;
+      if (typeof ev !== 'string' || ev.indexOf('calendly.') !== 0) return;
+      if (ev === 'calendly.event_scheduled') {
+        trackGa('calendly_booking', { method: 'calendly' });
+        trackGa('generate_lead', { method: 'calendly' });
+        return;
+      }
+      if (ev === 'calendly.event_type_viewed') {
+        trackGa('calendly_click', { calendly_step: 'event_type' });
+        return;
+      }
+      if (ev === 'calendly.date_and_time_selected') {
+        trackGa('calendly_click', { calendly_step: 'datetime' });
+      }
+    });
+  }
+  bindCalendlyAnalytics();
+
   function loadContentsquare() {
     var id = CONFIG.csId;
     var src = 'https://t.contentsquare.net/uxa/' + id + '.js';
@@ -295,8 +334,10 @@
     if (!CONFIG.calendly) show(false);
 
     bCal.addEventListener('click', function () {
-      if (getConsent()) loadCalendly();
-      else mountCookieBar();
+      if (getConsent()) {
+        loadCalendly();
+        trackGa('calendly_click', { calendly_step: 'tab' });
+      } else mountCookieBar();
     });
   })();
 
