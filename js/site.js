@@ -64,21 +64,27 @@
     }
   }
 
-  var calendlyLoaded = false;
+  var calendlyMode = '';
   function calendlyEmbedUrl() {
-    return CONFIG.calendly.split('?')[0] +
-      '?hide_gdpr_banner=1' +
-      '&embed_domain=' + encodeURIComponent(window.location.hostname) +
-      '&embed_type=Inline' +
-      '&background_color=0c0c0f&text_color=efece6';
+    var base = CONFIG.calendly.split('?')[0];
+    var hideBanner = getConsent() === 'all';
+    var q = [];
+    if (hideBanner) q.push('hide_gdpr_banner=1');
+    q.push('embed_domain=' + encodeURIComponent(window.location.hostname));
+    q.push('embed_type=Inline');
+    q.push('background_color=0c0c0f');
+    q.push('text_color=efece6');
+    return base + '?' + q.join('&');
   }
   function loadCalendly() {
     var mount = document.getElementById('cal-widget');
-    if (!mount || !CONFIG.calendly || calendlyLoaded) return;
-    calendlyLoaded = true;
+    if (!mount || !CONFIG.calendly) return;
+    var mode = getConsent() === 'all' ? 'all' : 'needed';
+    if (calendlyMode === mode && mount.querySelector('iframe')) return;
+    calendlyMode = mode;
     var url = calendlyEmbedUrl();
     mount.innerHTML = '';
-    mount.removeAttribute('data-url');
+    mount.setAttribute('data-url', url);
     mount.className = 'calendly-inline-widget';
     mount.style.minWidth = '320px';
     mount.style.height = '700px';
@@ -93,6 +99,11 @@
       init();
       return;
     }
+    var existing = document.querySelector('script[src*="assets.calendly.com/assets/external/widget.js"]');
+    if (existing) {
+      existing.addEventListener('load', init);
+      return;
+    }
     var s = document.createElement('script');
     s.src = 'https://assets.calendly.com/assets/external/widget.js';
     s.async = true;
@@ -104,6 +115,8 @@
     if (value === 'all') {
       loadAnalytics();
       loadContentsquare();
+    }
+    if (value === 'all' || value === 'needed') {
       loadCalendly();
     }
   }
@@ -118,7 +131,7 @@
     bar.innerHTML =
       '<div class="dk-notice-inner">' +
         '<p id="dk-notice-title">Diese Seite verwendet Cookies.</p>' +
-        '<p class="dk-notice-copy">Technisch nötige Cookies halten die Seite lauffähig. Statistik (Google Analytics, Hotjar) und der Terminkalender von Calendly werden nur gesetzt, wenn du zustimmst. So sehe ich, welche Seiten wirken — ohne Tracking gegen deinen Willen. <a href="' + privacyHref() + '">Datenschutz</a></p>' +
+        '<p class="dk-notice-copy">Diese Website verwendet Cookies für Statistik und Optimierungszwecke. Zur Auswertung werden die Tools Google Analytics und Hotjar verwendet. Die Zustimmung kann jederzeit widerrufen werden. Mehr zum <a href="' + privacyHref() + '">Datenschutz</a>.</p>' +
         '<div class="dk-notice-actions">' +
           '<button type="button" class="btn" data-opt="all">Alle akzeptieren</button>' +
           '<button type="button" class="btn btn-ghost" data-opt="needed">Nur notwendige</button>' +
@@ -133,6 +146,7 @@
     bar.querySelector('[data-opt="needed"]').addEventListener('click', function () {
       setConsent('needed');
       bar.remove();
+      applyConsent('needed');
     });
   }
 
@@ -281,8 +295,8 @@
     if (!CONFIG.calendly) show(false);
 
     bCal.addEventListener('click', function () {
-      if (getConsent() === 'all') loadCalendly();
-      else if (!getConsent()) mountCookieBar();
+      if (getConsent()) loadCalendly();
+      else mountCookieBar();
     });
   })();
 
